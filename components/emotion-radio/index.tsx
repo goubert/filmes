@@ -1,32 +1,51 @@
 "use client";
 
+import "./emotion-radio.css";
+
+
+type Option = {
+  value: number;
+  image: string;
+  label?: string;
+};
 type Props = {
   title: string;
   value: number;
   onChange: (value: number) => void;
+  options: Option[];
 };
 
-const OPTIONS = [
-  { value: 1, label: "Pouco" },
-  { value: 2, label: "Médio" },
-  { value: 3, label: "Muito" },
-];
 
-export default function EmotionRadio({ title, value, onChange }: Props) {
+
+
+export default function EmotionRadio({
+  title,
+  value,
+  onChange,
+  options,
+}: Props) {
   return (
     <fieldset className="emotion-group">
-      <legend>{title}</legend>
+      <span>{title}</span>
 
       <div className="options">
-        {OPTIONS.map((opt) => (
-          <label key={opt.value}>
+        {options.map((opt) => (
+          <label key={opt.value} className="emotion-option">
             <input
               type="radio"
               name={title}
               checked={value === opt.value}
               onChange={() => onChange(opt.value)}
+              className="emotion-radio"
             />
-            {opt.label}
+
+            <img
+              src={opt.image}
+              alt={opt.label ?? `${title} ${opt.value}`}
+              className={`emotion-image ${
+                value === opt.value ? "selected" : ""
+              }`}
+            />
           </label>
         ))}
       </div>

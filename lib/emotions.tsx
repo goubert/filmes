@@ -1,4 +1,4 @@
-export type EmotionKey = "laugh" | "cry" | "tense" | "scary";
+export type EmotionKey = "laugh" | "cry" | "tense" | "scary" | "romance";
 
 export const EMOTIONS = {
   laugh: {
@@ -7,15 +7,19 @@ export const EMOTIONS = {
   },
   cry: {
     label: "Esse filme me faz chorar",
-    genres: [18, 10749],
+    genres: [18],
   },
   tense: {
     label: "Esse filme me deixa tenso",
-    genres: [53, 28],
+    genres: [53],
   },
   scary: {
     label: "Esse filme me dá medo",
     genres: [27],
+  },
+  romance: {
+    label: "filme de romance",
+    genres: [10749],
   },
 };
 
