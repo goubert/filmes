@@ -1,0 +1,116 @@
+.emotion-radios{
+    display: flex;
+    flex-direction: row;
+    gap: 4px;
+    margin: 0 auto;
+    width: 100%;
+    align-items: center;
+    justify-content: center;
+}
+
+
+.emotion-group{
+    background: rgb(79, 79, 79, 0.5);
+    border-radius: 24px;
+    border: none;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    justify-content: center;
+    align-items: center;
+    padding: 14px;
+}
+
+.emotion-group span{
+    font-size: 14px;
+    display: flex;
+}
+
+.options  , label{
+    display: flex;
+    flex-direction: row;
+    gap: 8px;
+    justify-content: center;
+    align-items: center;
+   
+}
+
+
+
+input[type="radio"] {
+    /* Add if not using autoprefixer */
+    -webkit-appearance: none;
+    appearance: none;
+    /* For iOS < 15 to remove gradient background */
+    background-color: rgb(0, 0, 0, 0.5);
+    /* Not removed via appearance */
+    margin: 0;
+  }
+
+  input[type="radio"].emotion-radio {
+    appearance: none;
+    background-color: rgb(0, 0, 0, 0.5);
+    margin: 0;
+    font: inherit;
+    color: currentColor;
+    width: 32px;
+    height: 32px;
+    border: 0.15em solid currentColor;
+    border-radius: 50%;
+  }
+
+  .emotion-option{
+    color: rgb(0, 0, 0, 0.5);
+  }
+  .emotion-option img{
+    width: 32px;
+    position: absolute;
+  }
+  .emotion-option input[type="radio"]:checked .emotion-radio{
+    width: 42px;
+  }
+
+ 
+
+  .emotion-option input[type="radio"]:checked.emotion-radio {
+    appearance: none;
+    margin: 0;
+    font: inherit;
+    color: none;
+    background-color: white;
+    border-radius: 50%;
+    color: #fff;
+    width: 40px;
+    height: 40px;
+    box-shadow: 0px 2px 32px rgb(0, 0, 0, 0.8) ;
+  }
+
+ input[type="radio"]:checked.emotion-radio + img {
+    appearance: none;
+    margin: 0;
+    font: inherit;
+    color: none;
+    background-color: white;
+    border-radius: 50%;
+    color: #fff;
+    padding: 2px;
+    width: 40px;
+    height: 40px;
+    box-shadow: 0px 12px 24px -4px rgb(0, 0, 0, 0.5) ;
+  }
+  
+
+  
+
+  
+  
+  .form-control + .form-control {
+  }
+
+  @media (max-width: 600px) {
+    .emotion-radios{
+        
+        align-items: start;
+        justify-content: start;
+    }
+  }

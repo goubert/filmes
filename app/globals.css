@@ -29,5 +29,74 @@ body {
   padding: 0;
 }
 
+.wrap-options{
+  
+  padding: 16px;
+  background-color: #171717dd;
+  position: sticky;
+  top: 0;
+  backdrop-filter: blur(10px);
+  z-index: 9999;
+}
+
+.select-button{
+  display: flex;
+  flex-direction: row;
+  gap: 8px;
+  justify-content: flex-start;
+  align-self: normal;
+}
+
+select{
+  background: rgb(79, 79, 79, 0.5);
+  color: #fff;
+  border-radius: 24px;
+  border: none;
+  font-size: 18px;
+  padding: 16px;
+
+  align-self: normal;
+}
+select option{
+  background: yellow;
+}
+
+.btn-verfilmes{
+  background: #F0FF6D;
+  font-size: 18px;
+  font-weight: 700;
+  border-radius: 24px;
+  padding: 0 24px;
+  border: none;
+  cursor: pointer;
+}
+
+.sort-controls{
+  display: flex;
+  flex-direction: row;
+  gap: 8px;
+  position: sticky;
+  top: 130px;
+  width: fit-content;
+  margin: 10px auto ;
+  z-index: 9999;
+}
+.sort-controls select{
+  backdrop-filter: blur(20px);
+  background: rgba(43, 43, 43, 0.5);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 50px;
+}
+
+
+@media (max-width: 600px) {
+  .wrap-options{
+  
+    align-items: start;
+    justify-content: start;
+    overflow-y: scroll;
+  }
+}
+
 
 

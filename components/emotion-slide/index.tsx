@@ -1,5 +1,6 @@
 "use client";
 
+import {EmotionKey} from "@/lib/emotions"
 type Props = {
   label: string;
   value: number;
