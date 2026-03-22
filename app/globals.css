@@ -1,102 +1,53 @@
 @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&display=swap');
+
+/* ─── Design Tokens ─────────────────────────────────── */
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
-  font-family: "Outfit", sans-serif;
+  /* Colors */
+  --color-bg:           #0a0a0a;
+  --color-surface:      rgba(79, 79, 79, 0.5);
+  --color-surface-dark: rgba(22, 22, 22, 0.6);
+  --color-overlay:      rgba(23, 23, 23, 0.87);
+  --color-accent:       #FCFF81;
+  --color-accent-muted: #D0DD5F;
+  --color-text:         #ffffff;
+  --color-text-muted:   rgba(255, 255, 255, 0.2);
+  --color-border:       rgba(255, 255, 255, 0.1);
+  --color-border-hover: rgba(255, 255, 255, 0.3);
+
+  /* Typography */
+  --font-base:    'Outfit', sans-serif;
+  --text-xs:      10px;
+  --text-sm:      12px;
+  --text-md:      14px;
+  --text-lg:      18px;
+  --text-xl:      38px;
+
+  /* Spacing */
+  --space-xs:  4px;
+  --space-sm:  8px;
+  --space-md:  16px;
+  --space-lg:  24px;
+  --space-xl:  32px;
+
+  /* Border radius */
+  --radius-sm:   8px;
+  --radius-md:   20px;
+  --radius-lg:   24px;
+  --radius-full: 50px;
+
+  /* Transitions */
+  --transition-base: all 450ms ease-in-out;
+}
+
+/* ─── Reset ─────────────────────────────────────────── */
+*, *::before, *::after {
+  box-sizing: border-box;
   margin: 0;
   padding: 0;
-}
-
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: "Outfit", sans-serif;
-  margin: 0;
-  padding: 0;
+  background: var(--color-bg);
+  color: var(--color-text);
+  font-family: var(--font-base);
 }
-
-.wrap-options{
-  
-  padding: 16px;
-  background-color: #171717dd;
-  position: sticky;
-  top: 0;
-  backdrop-filter: blur(10px);
-  z-index: 9999;
-}
-
-.select-button{
-  display: flex;
-  flex-direction: row;
-  gap: 8px;
-  justify-content: flex-start;
-  align-self: normal;
-}
-
-select{
-  background: rgb(79, 79, 79, 0.5);
-  color: #fff;
-  border-radius: 24px;
-  border: none;
-  font-size: 18px;
-  padding: 16px;
-
-  align-self: normal;
-}
-select option{
-  background: yellow;
-}
-
-.btn-verfilmes{
-  background: #F0FF6D;
-  font-size: 18px;
-  font-weight: 700;
-  border-radius: 24px;
-  padding: 0 24px;
-  border: none;
-  cursor: pointer;
-}
-
-.sort-controls{
-  display: flex;
-  flex-direction: row;
-  gap: 8px;
-  position: sticky;
-  top: 130px;
-  width: fit-content;
-  margin: 10px auto ;
-  z-index: 9999;
-}
-.sort-controls select{
-  backdrop-filter: blur(20px);
-  background: rgba(43, 43, 43, 0.5);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 50px;
-}
-
-
-@media (max-width: 600px) {
-  .wrap-options{
-  
-    align-items: start;
-    justify-content: start;
-    overflow-y: scroll;
-  }
-}
-
-
-

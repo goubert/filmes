@@ -1,154 +1,140 @@
-.list-movies{
-    display: grid;
-    /* grid-template-columns: auto auto auto auto auto auto;
-    grid-template-rows: auto; */
-    gap: 16px;
-    max-width: 860px;
-    justify-content: center;
-    margin: 50px auto;
-    grid-template-columns: repeat(auto-fit, minmax(122px, 122px));
-  grid-auto-flow: dense;
+/* ─── Component: CardMovie ───────────────────────────── */
+
+.card-movie {
+  width: 122px;
+  height: 242px;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--color-border);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  box-sizing: border-box;
+  background: none;
+  transition: var(--transition-base);
 }
 
-
-.card-movie{
-    width: 122px;
-    height: 242px;
-    border-radius: 20px;
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    display: flex;
-    flex-direction: column;
-    overflow: hidden;
-    box-sizing: border-box;
-    background: none;
-    transition: all 450ms ease-in-out;
+.card-movie:hover {
+  border-color: var(--color-border-hover);
+  box-shadow: 0px 8px 28px -8px rgba(234, 255, 41, 0.1);
+  transition: var(--transition-base);
+  cursor: pointer;
 }
 
-.card-movie:hover{
-    border: 1px solid rgba(255, 255, 255, 0.3);
-    box-shadow: 0px 8px 28px -8px rgba(234, 255, 41, 0.1);
-    transition: all 450ms ease-in-out;
-    cursor: pointer;
-}
-.card-movie .image-rate{
-    flex-grow: 1;
-    width: 100%;
-    position: relative;
-    box-sizing: border-box;
+/* Poster area */
+.card-movie .image-rate {
+  flex-grow: 1;
+  width: 100%;
+  position: relative;
+  box-sizing: border-box;
 }
 
-.card-movie .image-rate img{
-    object-fit: cover;
-    width: 100%;
-    transition: all 450ms ease-in-out;
-    position: absolute;
-    top: 0;
-}
-    .card-movie:hover .image-rate > img{
-        object-fit: cover;
-        transform: scale(1.1);
-        transition: all 450ms ease-in-out;
-    }
-.card-movie .info-movie{
-    width: 100%;
-    height: 86px;
-    background: rgba(22, 22, 22, 0.60);
-    backdrop-filter: blur(20px);
-    margin-top: -25px;
-    padding: 16px;
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-    box-sizing: border-box;
-}
-.card-movie .info-movie::before{
-    position: absolute;
-    content: "";
-    top: 0;
-    right: 0;
-    width: 100%;
-    height: 1px;
-    background: linear-gradient(90deg,rgba(255, 255, 255, 0.06) 0%, rgba(255, 255, 255, 0.45) 50%, rgba(255, 255, 255, 0.06) 100%);
+.card-movie .image-rate img {
+  object-fit: cover;
+  width: 100%;
+  transition: var(--transition-base);
+  position: absolute;
+  top: 0;
 }
 
-.card-movie .info-movie .name-movie{
-    font-size: 14px;
-    color: #FCFF81;
-    width: 100%;
-    height: 38px;     /* Prevents the text from wrapping to a new line */
-    overflow: hidden;         /* Hides any text that goes outside the container */
-    text-overflow: ellipsis; 
-    line-height: 1.1;
-    display: -webkit-box;
+.card-movie:hover .image-rate > img {
+  transform: scale(1.1);
+  transition: var(--transition-base);
+}
+
+/* Info panel */
+.card-movie .info-movie {
+  width: 100%;
+  height: 86px;
+  background: var(--color-surface-dark);
+  backdrop-filter: blur(20px);
+  margin-top: -25px;
+  padding: var(--space-md);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+  box-sizing: border-box;
+}
+
+.card-movie .info-movie::before {
+  position: absolute;
+  content: "";
+  top: 0;
+  right: 0;
+  width: 100%;
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0.06) 0%,
+    rgba(255, 255, 255, 0.45) 50%,
+    rgba(255, 255, 255, 0.06) 100%
+  );
+}
+
+.card-movie .info-movie .name-movie {
+  font-size: var(--text-md);
+  color: var(--color-accent);
+  width: 100%;
+  height: 38px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  line-height: 1.1;
+  display: -webkit-box;
   -webkit-line-clamp: 3;
-  -webkit-box-orient: vertical;  
+  -webkit-box-orient: vertical;
 }
 
-.card-movie .info-movie .subinfo-container{
-    display: flex;
-    flex-direction: column;
-    gap: 2px;
+.card-movie .info-movie .subinfo-container {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
 }
 
-    .card-movie .info-movie .subinfo-container .subinfo{
-        font-size: 12px;
-        color: rgba(255 , 255 , 255 , 0.2);
-        display: flex;
-        flex-direction: row;
-        align-items: center;
-        gap: 2px;
-    }
+.card-movie .info-movie .subinfo-container .subinfo {
+  font-size: var(--text-sm);
+  color: var(--color-text-muted);
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 2px;
+}
 
-    .rating-tmdb {
-        position: absolute;
-    top: 12px;
-    left: 12px;
-    z-index: 999;
-        --size: 30px;
-        --thickness: 3px;
-        --bg: rgba(0, 0, 0, 0.9);
-        --track: rgba(0, 0, 0, 0.9);
-        --fill: #f5f56b; /* amarelo TMDB-like */
-      
-        width: var(--size);
-        height: var(--size);
-        border-radius: 50%;
-        border:2px solid rgba(0, 0, 0, 0.9);
-        background:
-        rgba(0, 0, 0, 0.9)
-          conic-gradient(
-            var(--fill) var(--percent),
-            var(--track) 0
-          );
-      
-        display: flex;
-        align-items: center;
-        justify-content: center;
-      
-        position: relative;
-        font-family: system-ui, sans-serif;
-      }
-      
-      .rating-tmdb::before {
-        content: '';
-        position: absolute;
-        inset: var(--thickness);
-        background: var(--bg);
-        border-radius: 50%;
-      }
-      
-      .rating-tmdb span {
-        position: relative;
-        z-index: 1;
-        color: white;
-        font-size: 10px;
-        font-weight: 600;
-        line-height: 1;
-      }
+/* Rating badge */
+.rating-tmdb {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  z-index: 999;
+  --size: 30px;
+  --thickness: 3px;
+  --bg: rgba(0, 0, 0, 0.9);
+  --track: rgba(0, 0, 0, 0.9);
+  --fill: var(--color-accent);
 
+  width: var(--size);
+  height: var(--size);
+  border-radius: 50%;
+  border: 2px solid rgba(0, 0, 0, 0.9);
+  background: rgba(0, 0, 0, 0.9)
+    conic-gradient(var(--fill) var(--percent), var(--track) 0);
 
-      
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
 
+.rating-tmdb::before {
+  content: '';
+  position: absolute;
+  inset: var(--thickness);
+  background: var(--bg);
+  border-radius: 50%;
+}
 
-
-
+.rating-tmdb span {
+  position: relative;
+  z-index: 1;
+  color: var(--color-text);
+  font-size: var(--text-xs);
+  font-weight: 600;
+  line-height: 1;
+}

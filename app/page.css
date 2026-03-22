@@ -1,0 +1,87 @@
+/* ─── Page: Home ─────────────────────────────────────── */
+
+/* Sticky filter bar */
+.wrap-options {
+  padding: var(--space-md);
+  background-color: var(--color-overlay);
+  position: sticky;
+  top: 0;
+  backdrop-filter: blur(10px);
+  z-index: 9999;
+}
+
+@media (max-width: 600px) {
+  .wrap-options {
+    align-items: start;
+    justify-content: start;
+    overflow-y: scroll;
+  }
+}
+
+/* Filter controls row */
+.select-button {
+  display: flex;
+  flex-direction: row;
+  gap: var(--space-sm);
+  justify-content: flex-start;
+  align-self: normal;
+}
+
+/* Select inputs */
+select {
+  background: var(--color-surface);
+  color: var(--color-text);
+  border-radius: var(--radius-lg);
+  border: none;
+  font-size: var(--text-lg);
+  padding: var(--space-md);
+  align-self: normal;
+  font-family: var(--font-base);
+}
+
+select option {
+  background: var(--color-accent);
+  color: var(--color-bg);
+}
+
+/* Primary CTA button */
+.btn-verfilmes {
+  background: var(--color-accent);
+  font-size: var(--text-lg);
+  font-weight: 700;
+  border-radius: var(--radius-lg);
+  padding: 0 var(--space-lg);
+  border: none;
+  cursor: pointer;
+  font-family: var(--font-base);
+}
+
+/* Sort controls */
+.sort-controls {
+  display: flex;
+  flex-direction: row;
+  gap: var(--space-sm);
+  position: sticky;
+  top: 130px;
+  width: fit-content;
+  margin: 10px auto;
+  z-index: 9999;
+}
+
+.sort-controls select {
+  backdrop-filter: blur(20px);
+  background: rgba(43, 43, 43, 0.5);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-full);
+}
+
+/* Movie grid */
+.list-movies {
+  display: grid;
+  gap: var(--space-md);
+  max-width: 860px;
+  justify-content: center;
+  margin: 50px auto;
+  grid-template-columns: repeat(auto-fit, minmax(122px, 122px));
+  grid-auto-flow: dense;
+}
