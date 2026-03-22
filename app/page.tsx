@@ -4,8 +4,8 @@ import "./page.css";
 import { useEffect, useState } from "react";
 import { Cardmovie } from "../components/cardmovie";
 import EmotionRadio from "../components/emotion-radio";
+import { FiltersSection } from "../components/filters";
 import { discoverMoviesByEmotions } from "@/lib/tmdb";
-import { YEAR_RANGES, YearRange } from "@/lib/constants"
 import { COUNTRIES } from "@/lib/countries"
 
 
@@ -26,9 +26,8 @@ export default function Home() {
   const [ratingOrder, setRatingOrder] = useState<"desc" | "asc">("desc");
   const [hasSearched, setHasSearched] = useState(false);
 
-  const [yearRange, setYearRange] = useState<YearRange>(
-    YEAR_RANGES[YEAR_RANGES.length - 1] // default: mais recente
-  )
+  const [yearRange, setYearRange] = useState({ start: 1900, end: 2026 })
+  const [duration, setDuration] = useState<string | null>(null)
 
   
  
@@ -68,7 +67,7 @@ export default function Home() {
   
   useEffect(() => {
     setHasSearched(false)
-  }, [emotions, yearRange, country])
+  }, [emotions, yearRange, country, duration])
 
   const RIR = [
     { value: 1, image: "/rir1.png" },
@@ -110,7 +109,8 @@ export default function Home() {
     const results = await discoverMoviesByEmotions(
       emotions,
       yearRange,
-      countries
+      countries,
+      duration
     )
   
     setMovies(results)
@@ -122,6 +122,14 @@ export default function Home() {
   
   return (
     <>
+      <FiltersSection
+        yearStart={yearRange.start}
+        yearEnd={yearRange.end}
+        onYearChange={(start, end) => setYearRange({ start, end })}
+        duration={duration}
+        onDurationChange={setDuration}
+      />
+
       <div className="wrap-options">
         <section className="emotion-radios">
           <EmotionRadio
@@ -163,26 +171,6 @@ export default function Home() {
 
           
           <div className="select-button">
-            <select
-              value={yearRange.start}
-              onChange={(e) => {
-                const selectedRange = YEAR_RANGES.find(
-                  (range) => range.start === Number(e.target.value)
-                )
-
-                if (selectedRange) {
-                  setYearRange(selectedRange)
-                }
-              }}
-            >
-              {YEAR_RANGES.map((range) => (
-                <option key={range.start} value={range.start}>
-                  {range.label}
-                </option>
-              ))}
-            </select>
-
-          
             <select
               value={country}
               onChange={(e) => setCountry(e.target.value)}

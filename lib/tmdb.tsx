@@ -45,7 +45,8 @@ import { EMOTIONS } from "./emotions";
 export async function discoverMoviesByEmotions(
   emotions: Record<string, number>,
   yearRange: { start: number; end: number },
-  countries: string[]
+  countries: string[],
+  duration: string | null = null
 ) {
   // 1️⃣ Ordena emoções pela intensidade
   const sorted = Object.entries(emotions).sort((a, b) => b[1] - a[1])
@@ -76,6 +77,11 @@ export async function discoverMoviesByEmotions(
   if (countries.length) {
     params.append("with_origin_country", countries.join("|"))
   }
+
+  // 4️⃣ Duração (opcional)
+  if (duration === "short")  params.set("with_runtime.lte", "90")
+  if (duration === "medium") { params.set("with_runtime.gte", "91"); params.set("with_runtime.lte", "120") }
+  if (duration === "long")   params.set("with_runtime.gte", "121")
 
   if (secondary && secondary[1] >= 2) {
     const secondaryGenres = EMOTIONS[secondary[0] as keyof typeof EMOTIONS].genres
