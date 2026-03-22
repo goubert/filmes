@@ -1,5 +1,6 @@
 "use client";
 
+import "./page.css";
 import { useEffect, useState } from "react";
 import { Cardmovie } from "../components/cardmovie";
 import EmotionRadio from "../components/emotion-radio";
