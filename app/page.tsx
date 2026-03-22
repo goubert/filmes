@@ -3,8 +3,8 @@
 import "./page.css";
 import { useEffect, useState } from "react";
 import { Cardmovie } from "../components/cardmovie";
-import EmotionRadio from "../components/emotion-radio";
 import { FiltersSection } from "../components/filters";
+import { MoodsSection } from "../components/moods-section";
 import { discoverMoviesByEmotions } from "@/lib/tmdb";
 import { COUNTRIES } from "@/lib/countries"
 
@@ -130,66 +130,34 @@ export default function Home() {
         onDurationChange={setDuration}
       />
 
+      <MoodsSection
+        emotions={emotions}
+        onChange={updateEmotion}
+        rir={RIR}
+        chorar={CHORAR}
+        tense={TENSE}
+        terror={TERROR}
+        romance={ROMANCE}
+      />
+
       <div className="wrap-options">
-        <section className="emotion-radios">
-          <EmotionRadio
-            title="É engraçado"
-            value={emotions.laugh}
-            onChange={(v) => updateEmotion("laugh", v)}
-            options={RIR}
-          />
+        <div className="select-button">
+          <select
+            value={country}
+            onChange={(e) => setCountry(e.target.value)}
+          >
+            {COUNTRIES.map((c) => (
+              <option key={c.value} value={c.value}>
+                {c.label}
+              </option>
+            ))}
+          </select>
 
-          <EmotionRadio
-            title="Faz chorar"
-            value={emotions.cry}
-            onChange={(v) => updateEmotion("cry", v)}
-            options={CHORAR}
-          />
-
-          <EmotionRadio
-            title="Suspense"
-            value={emotions.tense}
-            onChange={(v) => updateEmotion("tense", v)}
-            options={TENSE}
-          />
-          
-          <EmotionRadio
-            title="Dá medo"
-            value={emotions.scary}
-            onChange={(v) => updateEmotion("scary", v)}
-            options={TERROR}
-          />
-
-          <EmotionRadio
-            title="Romance"
-            value={emotions.romance}
-            onChange={(v) => updateEmotion("romance", v)}
-            options={ROMANCE}
-          />
-
-          
-
-          
-          <div className="select-button">
-            <select
-              value={country}
-              onChange={(e) => setCountry(e.target.value)}
-            >
-              {COUNTRIES.map((c) => (
-                <option key={c.value} value={c.value}>
-                  {c.label}
-                </option>
-              ))}
-            </select>
-
-
-
-            <button className="btn-verfilmes" onClick={handleSearch}>
-              Ver filmes
-            </button>
-          </div>
-        </section>
+          <button className="btn-verfilmes" onClick={handleSearch}>
+            Ver filmes
+          </button>
         </div>
+      </div>
         
             {hasSearched && (
               <div className="sort-controls">
