@@ -1,0 +1,205 @@
+/* ─── Component: FiltersSection ──────────────────────── */
+
+.filters-section {
+  display: flex;
+  flex-direction: column;
+  padding: var(--space-md);
+  max-width: 420px;
+}
+
+/* ─── Filter blocks ─────────────────────────────────── */
+
+.filter-block {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: var(--space-md);
+  gap: var(--space-lg);
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(160, 160, 160, 0.1);
+}
+
+.filter-block--top {
+  border-radius: 16px 16px 0 0;
+}
+
+.filter-block--bottom {
+  border-width: 0 1px 1px 1px;
+  border-radius: 0 0 16px 16px;
+}
+
+.filter-label {
+  font-family: var(--font-base);
+  font-size: var(--text-lg);
+  font-weight: 400;
+  color: var(--color-text);
+}
+
+/* ─── Duration pills ────────────────────────────────── */
+
+.duration-pills {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: var(--space-xs);
+}
+
+.duration-pill {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-sm) var(--space-md);
+  background: rgba(255, 255, 255, 0.1);
+  border: none;
+  border-radius: 56px;
+  font-family: var(--font-base);
+  font-size: var(--text-sm);
+  font-weight: 500;
+  color: #BABABA;
+  cursor: pointer;
+  transition: var(--transition-base);
+}
+
+.duration-pill--active {
+  background: var(--color-accent);
+  color: var(--color-bg);
+}
+
+/* ─── Year range slider ─────────────────────────────── */
+
+.year-slider-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 100%;
+}
+
+.year-slider-track-container {
+  position: relative;
+  height: 32px;
+  width: 100%;
+}
+
+/* Background track */
+.year-slider-track {
+  position: absolute;
+  height: 11px;
+  top: 50%;
+  transform: translateY(-50%);
+  left: 0;
+  right: 0;
+  background: rgba(255, 255, 255, 0.12);
+  border-radius: 40px;
+  pointer-events: none;
+}
+
+/* Active fill between thumbs */
+.year-slider-fill {
+  position: absolute;
+  height: 11px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: var(--color-accent);
+  border-radius: 40px;
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* Pill labels that visually represent the thumbs */
+.year-thumb-label {
+  position: absolute;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  min-width: 50px;
+  height: 32px;
+  padding: 0 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--color-accent);
+  border-top: 1px solid #ffffff;
+  border-radius: 50px;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.25),
+    inset 0px -1px 1px rgba(123, 108, 27, 0.35);
+  font-family: var(--font-base);
+  font-size: var(--text-sm);
+  font-weight: 500;
+  color: #000000;
+  pointer-events: none;
+  z-index: 2;
+}
+
+/* The two overlapping range inputs (invisible, handle interaction) */
+.year-range-input {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  margin: 0;
+  padding: 0;
+  appearance: none;
+  background: transparent;
+  pointer-events: none;
+  z-index: 3;
+}
+
+.year-range-input::-webkit-slider-runnable-track {
+  background: transparent;
+  border: none;
+}
+
+.year-range-input::-moz-range-track {
+  background: transparent;
+  border: none;
+}
+
+.year-range-input::-webkit-slider-thumb {
+  appearance: none;
+  pointer-events: all;
+  width: 50px;
+  height: 32px;
+  background: transparent;
+  border-radius: 50px;
+  cursor: grab;
+}
+
+.year-range-input::-moz-range-thumb {
+  pointer-events: all;
+  width: 50px;
+  height: 32px;
+  background: transparent;
+  border: none;
+  border-radius: 50px;
+  cursor: grab;
+}
+
+/* ─── Tick marks ────────────────────────────────────── */
+
+.year-ticks {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  width: 100%;
+}
+
+.year-tick {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+}
+
+.year-tick-line {
+  width: 1px;
+  height: 8px;
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.year-tick span {
+  font-family: var(--font-base);
+  font-size: 9px;
+  font-weight: 400;
+  color: #686868;
+  text-align: center;
+}
