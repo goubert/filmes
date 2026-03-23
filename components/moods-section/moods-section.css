@@ -31,7 +31,7 @@
   padding: var(--space-md);
   gap: var(--space-lg);
   border-radius: 16px;
-  box-shadow: 0px 6px 24px rgba(0, 0, 0, 0.35);
+  box-shadow: var(--shadow-card);
 }
 
 .mood-card__title {
@@ -58,7 +58,7 @@
   height: 44px;
   border-radius: 60px;
   background: rgba(0, 0, 0, 0.1);
-  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.06);
+  box-shadow: var(--shadow-emoji);
   border: none;
   cursor: pointer;
   padding: 2px;
@@ -76,7 +76,7 @@
 }
 
 .mood-emoji-btn--selected {
-  background: rgba(255, 255, 255, 0.35);
+  background: var(--color-surface-selected);
   box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.2);
   transform: scale(1.1);
 }

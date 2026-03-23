@@ -15,7 +15,7 @@
 
 .card-movie:hover {
   border-color: var(--color-border-hover);
-  box-shadow: 0px 8px 28px -8px rgba(234, 255, 41, 0.1);
+  box-shadow: 0px 8px 28px -8px var(--color-accent-glow);
   transition: var(--transition-base);
   cursor: pointer;
 }
@@ -106,15 +106,15 @@
   z-index: 999;
   --size: 30px;
   --thickness: 3px;
-  --bg: rgba(0, 0, 0, 0.9);
-  --track: rgba(0, 0, 0, 0.9);
+  --bg: var(--color-rating-bg);
+  --track: var(--color-rating-bg);
   --fill: var(--color-accent);
 
   width: var(--size);
   height: var(--size);
   border-radius: 50%;
-  border: 2px solid rgba(0, 0, 0, 0.9);
-  background: rgba(0, 0, 0, 0.9)
+  border: 2px solid var(--color-rating-bg);
+  background: var(--color-rating-bg)
     conic-gradient(var(--fill) var(--percent), var(--track) 0);
 
   display: flex;
