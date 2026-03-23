@@ -9,10 +9,27 @@
   --color-overlay:      rgba(23, 23, 23, 0.87);
   --color-accent:       #FCFF81;
   --color-accent-muted: #D0DD5F;
+  --color-cta:          #FFF159;
+  --color-cta-shadow:   rgba(252, 255, 129, 0.21);
+  --color-cta-inset:    rgba(167, 112, 34, 0.29);
   --color-text:         #ffffff;
   --color-text-muted:   rgba(255, 255, 255, 0.2);
-  --color-border:       rgba(255, 255, 255, 0.1);
-  --color-border-hover: rgba(255, 255, 255, 0.3);
+  --color-border:            rgba(255, 255, 255, 0.1);
+  --color-border-hover:      rgba(255, 255, 255, 0.3);
+  --color-border-subtle:     rgba(160, 160, 160, 0.1);
+  --color-black:             #000000;
+  --color-text-disabled:     #BABABA;
+  --color-text-subtle:       #686868;
+  --color-surface-subtle:    rgba(255, 255, 255, 0.05);
+  --color-surface-light:     rgba(255, 255, 255, 0.12);
+  --color-surface-interactive: rgba(255, 255, 255, 0.1);
+  --color-surface-selected:  rgba(255, 255, 255, 0.35);
+  --color-rating-bg:         rgba(0, 0, 0, 0.9);
+  --color-accent-glow:       rgba(234, 255, 41, 0.1);
+
+  /* Shadows */
+  --shadow-card:  0px 6px 24px rgba(0, 0, 0, 0.35);
+  --shadow-emoji: 0px 4px 6px rgba(0, 0, 0, 0.06);
 
   /* Typography */
   --font-base:    'Outfit', sans-serif;

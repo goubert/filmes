@@ -6,7 +6,6 @@ import { Cardmovie } from "../components/cardmovie";
 import { FiltersSection } from "../components/filters";
 import { MoodsSection } from "../components/moods-section";
 import { discoverMoviesByEmotions } from "@/lib/tmdb";
-import { COUNTRIES } from "@/lib/countries"
 
 
 export default function Home() {
@@ -58,16 +57,13 @@ export default function Home() {
       return ratingOrder === "desc" ? -ratingDiff : ratingDiff;
     });
   }
-    /* pais */
-    const [country, setCountry] = useState<string>("ALL")
-
   useEffect(() => {
     setSortedMovies(sortMovies(movies, dateOrder, ratingOrder));
   }, [movies, dateOrder, ratingOrder]);
-  
+
   useEffect(() => {
     setHasSearched(false)
-  }, [emotions, yearRange, country, duration])
+  }, [emotions, yearRange, duration])
 
   const RIR = [
     { value: 1, image: "/rir1.png" },
@@ -103,13 +99,10 @@ export default function Home() {
   const handleSearch = async () => {
     setLoading(true)
   
-    const countries =
-      country === "ALL" ? [] : [country]
-  
     const results = await discoverMoviesByEmotions(
       emotions,
       yearRange,
-      countries,
+      [],
       duration
     )
   
@@ -141,22 +134,9 @@ export default function Home() {
       />
 
       <div className="wrap-options">
-        <div className="select-button">
-          <select
-            value={country}
-            onChange={(e) => setCountry(e.target.value)}
-          >
-            {COUNTRIES.map((c) => (
-              <option key={c.value} value={c.value}>
-                {c.label}
-              </option>
-            ))}
-          </select>
-
-          <button className="btn-verfilmes" onClick={handleSearch}>
-            Ver filmes
-          </button>
-        </div>
+        <button className="btn-buscar" onClick={handleSearch}>
+          Buscar filmes
+        </button>
       </div>
         
             {hasSearched && (
