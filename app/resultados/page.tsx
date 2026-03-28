@@ -1,6 +1,6 @@
 import "./resultados.css";
 import { Cardmovie } from "@/components/cardmovie";
-import { discoverMoviesByEmotions } from "@/lib/tmdb";
+import { discoverMoviesByEmotions, getStreamingProvidersBR } from "@/lib/tmdb";
 import { ResultadosFilterBar } from "@/components/resultados-filter-bar";
 
 type SearchParams = {
@@ -12,6 +12,7 @@ type SearchParams = {
   yearStart?: string;
   yearEnd?: string;
   duration?: string;
+  providers?: string;
 };
 
 export default async function ResultadosPage({
@@ -34,9 +35,16 @@ export default async function ResultadosPage({
 
   const duration = searchParams.duration ?? null;
 
-  const [movies] = await Promise.all([
-    discoverMoviesByEmotions(emotions, yearRange, [], duration),
-    new Promise((r) => setTimeout(r,1000)),
+  const providerIds = searchParams.providers
+    ? searchParams.providers.split(",").map(Number).filter(Boolean)
+    : [];
+
+  const [[movies], streamingProviders] = await Promise.all([
+    Promise.all([
+      discoverMoviesByEmotions(emotions, yearRange, [], duration, providerIds),
+      new Promise((r) => setTimeout(r, 1000)),
+    ]),
+    getStreamingProvidersBR(),
   ]);
 
   return (
@@ -46,6 +54,8 @@ export default async function ResultadosPage({
         yearStart={yearRange.start}
         yearEnd={yearRange.end}
         duration={duration}
+        selectedProviders={providerIds}
+        streamingProviders={streamingProviders}
       />
 
       {movies.length === 0 ? (

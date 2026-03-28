@@ -20,6 +20,7 @@ export default function Home() {
 
   const [yearRange, setYearRange] = useState({ start: 1900, end: 2026 });
   const [duration, setDuration] = useState<string | null>(null);
+  const [selectedProviders, setSelectedProviders] = useState<number[]>([]);
 
   function updateEmotion(key: keyof typeof emotions, value: number) {
     setEmotions((prev) => ({ ...prev, [key]: value }));
@@ -42,6 +43,7 @@ export default function Home() {
       yearEnd:   String(yearRange.end),
     });
     if (duration) params.set("duration", duration);
+    if (selectedProviders.length) params.set("providers", selectedProviders.join(","));
     router.push(`/resultados?${params.toString()}`);
   }
 
@@ -54,6 +56,8 @@ export default function Home() {
         onYearChange={(start, end) => setYearRange({ start, end })}
         duration={duration}
         onDurationChange={setDuration}
+        selectedProviders={selectedProviders}
+        onProvidersChange={setSelectedProviders}
       />
 
       <MoodsSection

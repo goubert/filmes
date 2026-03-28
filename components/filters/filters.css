@@ -23,6 +23,10 @@
   border-radius: 16px 16px 0 0;
 }
 
+.filter-block--middle {
+  border-width: 0 1px 1px 1px;
+}
+
 .filter-block--bottom {
   border-width: 0 1px 1px 1px;
   border-radius: 0 0 16px 16px;
@@ -63,6 +67,45 @@
 .duration-pill--active {
   background: var(--color-accent);
   color: var(--color-bg);
+}
+
+/* ─── Streaming pills ───────────────────────────────── */
+
+.streaming-pills {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: var(--space-sm);
+}
+
+.streaming-pill {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  background: var(--color-surface-interactive);
+  border: 2px solid transparent;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: var(--transition-base);
+  opacity: 0.5;
+}
+
+.streaming-pill img {
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+}
+
+.streaming-pill--active {
+  border-color: var(--color-accent);
+  background: var(--color-accent-glow);
+  opacity: 1;
+}
+
+.streaming-pill:hover {
+  opacity: 1;
 }
 
 /* ─── Year range slider ─────────────────────────────── */

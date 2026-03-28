@@ -1,5 +1,11 @@
 import "./cardmovie.css";
 
+type StreamingProvider = {
+  provider_id: number;
+  provider_name: string;
+  logo_path: string;
+};
+
 type Movie = {
   id: number;
   title: string;
@@ -7,6 +13,7 @@ type Movie = {
   release_date: string;
   runtime: number | null;
   vote_average: number;
+  streaming: StreamingProvider[];
 };
 
 function formatRuntime(minutes: number): string {
@@ -51,6 +58,21 @@ export function Cardmovie({ movie }: { movie: Movie }) {
               <span>{formatRuntime(movie.runtime)}</span>
             </div>
           ) : null}
+          {movie.streaming?.length > 0 && (
+            <div className="card-movie__streaming">
+              {movie.streaming.slice(0, 3).map((p) => (
+                <img
+                  key={p.provider_id}
+                  src={`https://image.tmdb.org/t/p/original${p.logo_path}`}
+                  alt={p.provider_name}
+                  title={p.provider_name}
+                  width={16}
+                  height={16}
+                  className="card-movie__streaming-logo"
+                />
+              ))}
+            </div>
+          )}
         </div>
       </div>
     </div>
