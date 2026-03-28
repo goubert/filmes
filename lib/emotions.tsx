@@ -67,6 +67,6 @@ export const EMOTIONS: Record<EmotionKey, EmotionDef> = {
   psychological: {
     label: "Tensão psicológica",
     genres: [53],
-    keywords: [149430],
+    keywords: [12565],
   },
 };
