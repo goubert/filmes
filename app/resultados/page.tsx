@@ -29,15 +29,19 @@ export default async function ResultadosPage({
   searchParams: SearchParams;
 }) {
   const emotions = {
-    laugh:     Number(searchParams.laugh     ?? 1),
-    cry:       Number(searchParams.cry       ?? 1),
-    tense:     Number(searchParams.tense     ?? 1),
-    scary:     Number(searchParams.scary     ?? 1),
-    romance:   Number(searchParams.romance   ?? 1),
-    action:    Number(searchParams.action    ?? 1),
-    adventure: Number(searchParams.adventure ?? 1),
-    animation: Number(searchParams.animation ?? 1),
-    family:    Number(searchParams.family    ?? 1),
+    laugh:         Number(searchParams.laugh         ?? 1),
+    cry:           Number(searchParams.cry           ?? 1),
+    tense:         Number(searchParams.tense         ?? 1),
+    scary:         Number(searchParams.scary         ?? 1),
+    romance:       Number(searchParams.romance       ?? 1),
+    action:        Number(searchParams.action        ?? 1),
+    adventure:     Number(searchParams.adventure     ?? 1),
+    animation:     Number(searchParams.animation     ?? 1),
+    family:        Number(searchParams.family        ?? 1),
+    feelgood:      Number(searchParams.feelgood      ?? 1),
+    melancholic:   Number(searchParams.melancholic   ?? 1),
+    nostalgic:     Number(searchParams.nostalgic     ?? 1),
+    psychological: Number(searchParams.psychological ?? 1),
   };
 
   const yearRange = {
