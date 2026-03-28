@@ -93,14 +93,24 @@ export async function discoverMoviesByEmotions(
 
   const res = await fetch(
     `https://api.themoviedb.org/3/discover/movie?${params.toString()}`,
-    {
-      cache: "no-store",
-    }
+    { cache: "no-store" }
   )
 
   const data = await res.json()
+  const movies = data.results.slice(0, 30)
 
-  return data.results.slice(0, 30)
+  const moviesWithRuntime = await Promise.all(
+    movies.map(async (movie: any) => {
+      const detailRes = await fetch(
+        `${API_URL}/movie/${movie.id}?api_key=${process.env.NEXT_PUBLIC_TMDB_KEY}&language=pt-BR`,
+        { next: { revalidate: 86400 } }
+      )
+      const detail = await detailRes.json()
+      return { ...movie, runtime: detail.runtime ?? null }
+    })
+  )
+
+  return moviesWithRuntime
 }
 
 

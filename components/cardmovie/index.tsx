@@ -1,53 +1,58 @@
-
 import "./cardmovie.css";
 
 type Movie = {
-    id: number
-    title: string
-    poster_path: string
-    release_date: string
-    runtime: number
-    vote_average: number
-  }
+  id: number;
+  title: string;
+  poster_path: string;
+  release_date: string;
+  runtime: number | null;
+  vote_average: number;
+};
 
-  type RatingCircleProps = {
-  rating: number // 0–10
+function formatRuntime(minutes: number): string {
+  const h = Math.floor(minutes / 60);
+  const m = minutes % 60;
+  return h > 0 ? `${h}h ${m}m` : `${m}m`;
 }
 
-export default function RatingCircle({ rating }: RatingCircleProps) {
-  const percent = Math.round(rating * 10)
+export function Cardmovie({ movie }: { movie: Movie }) {
+  const percent = Math.round(movie.vote_average * 10);
+  const year = movie.release_date?.split("-")[0];
 
   return (
-    <div
-      className="rating-tmdb"
-      style={{ ['--percent' as any]: `${percent}%` }}
-    >
-      <span>{percent}</span>
-    </div>
-  )
-}
-
-  
-
-export function Cardmovie({ movie }: { movie: Movie }){
-    return(
-        <div className="card-movie">
-            <div className="image-rate">
-                <RatingCircle rating={movie.vote_average} />
-                <img src={`https://image.tmdb.org/t/p/w300${movie.poster_path}`} alt={movie.title} />
-            </div>
-            <div className="info-movie">
-                <div className="name-movie">{movie.title}</div>
-                <div className="subinfo-container">
-                    <div className="subinfo">
-                        <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M3.9375 1.75L3.9375 3.0625M10.0625 1.75L10.0625 3.0625M1.75 10.9375L1.75 4.375C1.75 4.0269 1.88828 3.69306 2.13442 3.44692C2.38056 3.20078 2.7144 3.0625 3.0625 3.0625L10.9375 3.0625C11.2856 3.0625 11.6194 3.20078 11.8656 3.44692C12.1117 3.69306 12.25 4.0269 12.25 4.375L12.25 10.9375M1.75 10.9375C1.75 11.2856 1.88828 11.6194 2.13442 11.8656C2.38056 12.1117 2.7144 12.25 3.0625 12.25L10.9375 12.25C11.2856 12.25 11.6194 12.1117 11.8656 11.8656C12.1117 11.6194 12.25 11.2856 12.25 10.9375M1.75 10.9375L1.75 6.5625C1.75 6.2144 1.88828 5.88056 2.13442 5.63442C2.38056 5.38828 2.7144 5.25 3.0625 5.25L10.9375 5.25C11.2856 5.25 11.6194 5.38828 11.8656 5.63442C12.1117 5.88056 12.25 6.2144 12.25 6.5625L12.25 10.9375" stroke="#545454" stroke-linecap="round" stroke-linejoin="round"/>
-                        </svg>
-                        {movie.release_date?.split('-')[0]}
-                    </div>
-                </div>
-            </div>
+    <div className="card-movie">
+      <div className="card-movie__poster">
+        <div className="card-movie__badge" style={{ ["--percent" as any]: `${percent}%` }}>
+          <span>{percent}</span>
         </div>
-        
-    )
+        <img
+          src={`https://image.tmdb.org/t/p/w300${movie.poster_path}`}
+          alt={movie.title}
+        />
+      </div>
+
+      <div className="card-movie__info">
+        <div className="card-movie__title">{movie.title}</div>
+        <div className="card-movie__meta">
+          {year && (
+            <div className="card-movie__meta-row">
+              <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+                <path d="M3.9375 1.75v1.3125M10.0625 1.75v1.3125M1.75 10.9375V4.375c0-.3481.13828-.68194.38442-.92808C2.38056 3.20078 2.7144 3.0625 3.0625 3.0625h7.875c.3481 0 .6819.13828.9281.38442.2461.24614.3844.57998.3844.92808v6.5625M1.75 10.9375c0 .3481.13828.6819.38442.9281.24614.2461.57998.3844.92808.3844h7.875c.3481 0 .6819-.1383.9281-.3844.2461-.2462.3844-.58.3844-.9281M1.75 10.9375V6.5625c0-.3481.13828-.68194.38442-.92808C2.38056 5.38828 2.7144 5.25 3.0625 5.25h7.875c.3481 0 .6819.13828.9281.38442.2461.24614.3844.57998.3844.92808v4.375" stroke="#545454" strokeLinecap="round" strokeLinejoin="round"/>
+              </svg>
+              <span>{year}</span>
+            </div>
+          )}
+          {movie.runtime ? (
+            <div className="card-movie__meta-row">
+              <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+                <circle cx="7" cy="7" r="5.25" stroke="#545454" strokeLinecap="round"/>
+                <path d="M7 4.375V7l1.75 1.75" stroke="#545454" strokeLinecap="round" strokeLinejoin="round"/>
+              </svg>
+              <span>{formatRuntime(movie.runtime)}</span>
+            </div>
+          ) : null}
+        </div>
+      </div>
+    </div>
+  );
 }
