@@ -1,0 +1,22 @@
+/* ─── Loading: Resultados ────────────────────────────── */
+
+.resultados-loading {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  flex: 1;
+  min-height: calc(100dvh - 72px);
+}
+
+.resultados-loading__text {
+  max-width: 284px;
+  font-family: var(--font-base);
+  font-style: normal;
+  font-weight: 400;
+  font-size: 31px;
+  line-height: 39px;
+  text-align: center;
+  letter-spacing: 0.02em;
+  color: var(--color-text);
+}

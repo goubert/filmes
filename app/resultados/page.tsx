@@ -34,7 +34,10 @@ export default async function ResultadosPage({
 
   const duration = searchParams.duration ?? null;
 
-  const movies = await discoverMoviesByEmotions(emotions, yearRange, [], duration);
+  const [movies] = await Promise.all([
+    discoverMoviesByEmotions(emotions, yearRange, [], duration),
+    new Promise((r) => setTimeout(r,1000)),
+  ]);
 
   return (
     <main className="resultados">
