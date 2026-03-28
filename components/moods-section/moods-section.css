@@ -46,16 +46,15 @@
 .mood-card__emojis {
   display: flex;
   flex-direction: row;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
   gap: var(--space-sm);
-  align-content: flex-start;
 }
 
 /* ─── Individual emoji button ───────────────────────── */
 
 .mood-emoji-btn {
-  width: 44px;
-  height: 44px;
+  width: 38px;
+  height: 38px;
   border-radius: 60px;
   background: rgba(0, 0, 0, 0.1);
   box-shadow: var(--shadow-emoji);
@@ -70,8 +69,8 @@
 }
 
 .mood-emoji-btn img {
-  width: 40px;
-  height: 40px;
+  width: 34px;
+  height: 34px;
   pointer-events: none;
 }
 
