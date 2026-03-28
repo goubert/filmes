@@ -5,6 +5,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { FiltersSection } from "../components/filters";
 import { MoodsSection } from "../components/moods-section";
+import { Header } from "../components/header";
 
 export default function Home() {
   const router = useRouter();
@@ -46,6 +47,7 @@ export default function Home() {
 
   return (
     <>
+      <Header />
       <FiltersSection
         yearStart={yearRange.start}
         yearEnd={yearRange.end}
