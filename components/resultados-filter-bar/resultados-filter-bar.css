@@ -1,12 +1,25 @@
 /* ─── Component: ResultadosFilterBar ─────────────────── */
 
+/* Scroll wrapper — só a barra de filtros rola horizontalmente */
+.rfb-scroll {
+  overflow-x: auto;
+  overflow-y: visible;
+  scrollbar-width: none;
+}
+
+.rfb-scroll::-webkit-scrollbar {
+  display: none;
+}
+
 .rfb {
   display: flex;
   flex-direction: row;
-  align-items: flex-start;
+  align-items: center;
   padding: 0 16px;
   gap: 8px;
   height: 42px;
+  width: max-content;
+  min-width: 100%;
 }
 
 /* Home button */
@@ -22,11 +35,6 @@
   border-radius: 50px;
   cursor: pointer;
   flex-shrink: 0;
-}
-
-/* Pill wrapper (for popup positioning) */
-.rfb__pill-wrap {
-  position: relative;
 }
 
 /* Filter pill */
@@ -66,19 +74,17 @@
   flex-shrink: 0;
 }
 
-/* Transparent overlay to close popup on outside click */
+/* Overlay fullscreen */
 .rfb__overlay {
   position: fixed;
   inset: 0;
-  z-index: 10;
+  z-index: 100;
 }
 
-/* Popup panel */
+/* Popup panel — fixed ao viewport, posição calculada via JS */
 .rfb__popup {
-  position: absolute;
-  top: calc(100% + 8px);
-  left: 0;
-  z-index: 11;
+  position: fixed;
+  z-index: 101;
   display: flex;
   flex-direction: column;
   background: var(--color-accent-muted);
@@ -93,6 +99,7 @@
   font-size: 13px;
   font-weight: 500;
   color: var(--color-black);
+  background: none;
   text-align: left;
   cursor: pointer;
   border-bottom: 1px solid rgba(0, 0, 0, 0.08);
@@ -109,4 +116,91 @@
 
 .rfb__option--active {
   font-weight: 700;
+}
+
+/* Pill active state (streaming with selection) */
+.rfb__pill--active {
+  border-color: var(--color-accent-muted);
+}
+
+.rfb__pill--active .rfb__pill-label {
+  color: var(--color-accent-muted);
+}
+
+/* Streaming popup */
+.rfb__popup--streaming {
+  min-width: 220px;
+  padding: 12px;
+  gap: 12px;
+  display: flex;
+  flex-direction: column;
+}
+
+.rfb__streaming-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px;
+}
+
+.rfb__streaming-option {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 10px;
+  padding: 4px;
+  cursor: pointer;
+  border: 2px solid transparent;
+  transition: border-color 150ms ease, opacity 150ms ease;
+  opacity: 0.5;
+}
+
+.rfb__streaming-option img {
+  width: 40px;
+  height: 40px;
+  border-radius: 8px;
+  display: block;
+}
+
+.rfb__streaming-option--selected {
+  border-color: var(--color-black);
+  opacity: 1;
+}
+
+.rfb__streaming-option:hover {
+  opacity: 1;
+}
+
+.rfb__streaming-more {
+  background: none;
+  border: none;
+  outline: none;
+  padding: 0;
+  font-family: var(--font-base);
+  font-size: 13px;
+  font-weight: 500;
+  color: rgba(0, 0, 0, 0.7);
+  text-align: left;
+  cursor: pointer;
+  text-align: right;
+  align-self: flex-end;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.rfb__streaming-apply {
+  width: 100%;
+  padding: 10px;
+  background: var(--color-black);
+  color: var(--color-accent-muted);
+  font-family: var(--font-base);
+  font-size: 13px;
+  font-weight: 600;
+  border-radius: 50px;
+  cursor: pointer;
+  text-align: center;
+  transition: opacity 150ms ease;
+}
+
+.rfb__streaming-apply:hover {
+  opacity: 0.85;
 }
