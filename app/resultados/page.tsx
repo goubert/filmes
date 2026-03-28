@@ -1,7 +1,7 @@
 import "./resultados.css";
-import Link from "next/link";
 import { Cardmovie } from "@/components/cardmovie";
 import { discoverMoviesByEmotions } from "@/lib/tmdb";
+import { ResultadosFilterBar } from "@/components/resultados-filter-bar";
 
 type SearchParams = {
   laugh?: string;
@@ -41,9 +41,12 @@ export default async function ResultadosPage({
 
   return (
     <main className="resultados">
-      <Link href="/" className="btn-voltar">
-        ← Voltar
-      </Link>
+      <ResultadosFilterBar
+        emotions={emotions}
+        yearStart={yearRange.start}
+        yearEnd={yearRange.end}
+        duration={duration}
+      />
 
       {movies.length === 0 ? (
         <p className="resultados__empty">Nenhum filme encontrado. Tente ajustar os filtros.</p>
