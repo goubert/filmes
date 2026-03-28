@@ -9,6 +9,14 @@ type SearchParams = {
   tense?: string;
   scary?: string;
   romance?: string;
+  action?: string;
+  adventure?: string;
+  animation?: string;
+  family?: string;
+  feelgood?: string;
+  melancholic?: string;
+  nostalgic?: string;
+  psychological?: string;
   yearStart?: string;
   yearEnd?: string;
   duration?: string;
@@ -21,11 +29,15 @@ export default async function ResultadosPage({
   searchParams: SearchParams;
 }) {
   const emotions = {
-    laugh:   Number(searchParams.laugh   ?? 1),
-    cry:     Number(searchParams.cry     ?? 1),
-    tense:   Number(searchParams.tense   ?? 1),
-    scary:   Number(searchParams.scary   ?? 1),
-    romance: Number(searchParams.romance ?? 1),
+    laugh:     Number(searchParams.laugh     ?? 1),
+    cry:       Number(searchParams.cry       ?? 1),
+    tense:     Number(searchParams.tense     ?? 1),
+    scary:     Number(searchParams.scary     ?? 1),
+    romance:   Number(searchParams.romance   ?? 1),
+    action:    Number(searchParams.action    ?? 1),
+    adventure: Number(searchParams.adventure ?? 1),
+    animation: Number(searchParams.animation ?? 1),
+    family:    Number(searchParams.family    ?? 1),
   };
 
   const yearRange = {

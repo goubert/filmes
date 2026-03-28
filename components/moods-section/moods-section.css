@@ -14,6 +14,11 @@
   color: var(--color-text);
 }
 
+.moods-section__title--advanced {
+  margin-top: var(--space-md);
+  color: var(--color-text-disabled);
+}
+
 /* ─── 2-column grid ─────────────────────────────────── */
 
 .moods-grid {
@@ -71,6 +76,12 @@
 .mood-emoji-btn img {
   width: 34px;
   height: 34px;
+  pointer-events: none;
+}
+
+.mood-emoji-text {
+  font-size: 22px;
+  line-height: 1;
   pointer-events: none;
 }
 
