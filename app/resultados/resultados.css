@@ -40,4 +40,8 @@
   gap: var(--space-sm);
   grid-template-columns: repeat(3, 1fr);
   padding: 0 var(--space-md);
+
+  @media (min-width: 1024px) {
+    grid-template-columns: repeat(6, 1fr);
+  }
 }

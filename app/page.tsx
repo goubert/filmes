@@ -63,6 +63,7 @@ export default function Home() {
 
   return (
     <>
+      <div className="home-wrapper">
       <Header />
       <FiltersSection
         yearStart={yearRange.start}
@@ -91,6 +92,8 @@ export default function Home() {
         nostalgic={NOSTALGIC}
         psychological={PSYCHOLOGICAL}
       />
+
+      </div>
 
       <div className="wrap-options">
         <button className="btn-buscar" onClick={handleSearch}>
