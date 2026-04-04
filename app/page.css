@@ -1,5 +1,23 @@
 /* ─── Page: Home ─────────────────────────────────────── */
 
+/* Desktop centered wrapper */
+.home-wrapper {
+  display: block;
+}
+
+@media (min-width: 1024px) {
+  .home-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    max-width: 806px;
+    width: 100%;
+    margin: 0 auto;
+    padding: 36px 0 0;
+    gap: 34px;
+  }
+}
+
 /* Sticky search bar */
 .wrap-options {
   padding: var(--space-md);
@@ -21,7 +39,11 @@
 
 /* Search CTA button */
 .btn-buscar {
-  width: 100%;
+  width: calc(100vw - var(--space-md) * 2);
+
+  @media (min-width: 1024px) {
+    width: 138px;
+  }
   height: 44px;
   background: var(--color-cta);
   border-width: 1px 0 0 1px;

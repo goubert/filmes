@@ -5,6 +5,11 @@
   flex-direction: column;
   gap: var(--space-lg);
   padding: var(--space-md);
+
+  @media (min-width: 1024px) {
+    padding: 0;
+    width: 100%;
+  }
 }
 
 .moods-section__title {
@@ -25,6 +30,11 @@
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: var(--space-sm);
+
+  @media (min-width: 1024px) {
+    grid-template-columns: repeat(4, 1fr);
+    gap: var(--space-md);
+  }
 }
 
 /* ─── Individual mood card ──────────────────────────── */
@@ -60,6 +70,11 @@
 .mood-emoji-btn {
   width: 38px;
   height: 38px;
+
+  @media (min-width: 1024px) {
+    width: 44px;
+    height: 44px;
+  }
   border-radius: 60px;
   background: rgba(0, 0, 0, 0.1);
   box-shadow: var(--shadow-emoji);
@@ -77,6 +92,11 @@
   width: 34px;
   height: 34px;
   pointer-events: none;
+
+  @media (min-width: 1024px) {
+    width: 40px;
+    height: 40px;
+  }
 }
 
 .mood-emoji-text {
