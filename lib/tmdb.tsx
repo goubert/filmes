@@ -72,6 +72,7 @@ export async function discoverMoviesByEmotions(
 
   const params = new URLSearchParams({
     api_key: process.env.NEXT_PUBLIC_TMDB_KEY!,
+    language: "pt-BR",
     sort_by: levelConfig.sortBy,
     "vote_count.gte": String(levelConfig.voteCount),
     "vote_average.gte": String(levelConfig.voteAverage),
@@ -112,7 +113,7 @@ export async function discoverMoviesByEmotions(
       )
       const detail = await detailRes.json()
       const streaming = detail['watch/providers']?.results?.BR?.flatrate ?? []
-      return { ...movie, runtime: detail.runtime ?? null, streaming }
+      return { ...movie, title: detail.title ?? movie.title, runtime: detail.runtime ?? null, streaming }
     })
   )
 
