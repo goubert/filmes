@@ -28,20 +28,23 @@ export default async function ResultadosPage({
 }: {
   searchParams: SearchParams;
 }) {
+  const toLevel = (v: string | undefined) =>
+    v === "true" ? 2 : v === "false" ? 0 : Number(v ?? 1);
+
   const emotions = {
-    laugh:         Number(searchParams.laugh         ?? 1),
-    cry:           Number(searchParams.cry           ?? 1),
-    tense:         Number(searchParams.tense         ?? 1),
-    scary:         Number(searchParams.scary         ?? 1),
-    romance:       Number(searchParams.romance       ?? 1),
-    action:        Number(searchParams.action        ?? 1),
-    adventure:     Number(searchParams.adventure     ?? 1),
-    animation:     Number(searchParams.animation     ?? 1),
-    family:        Number(searchParams.family        ?? 1),
-    feelgood:      Number(searchParams.feelgood      ?? 1),
-    melancholic:   Number(searchParams.melancholic   ?? 1),
-    nostalgic:     Number(searchParams.nostalgic     ?? 1),
-    psychological: Number(searchParams.psychological ?? 1),
+    laugh:         toLevel(searchParams.laugh),
+    cry:           toLevel(searchParams.cry),
+    tense:         toLevel(searchParams.tense),
+    scary:         toLevel(searchParams.scary),
+    romance:       toLevel(searchParams.romance),
+    action:        toLevel(searchParams.action),
+    adventure:     toLevel(searchParams.adventure),
+    animation:     toLevel(searchParams.animation),
+    family:        toLevel(searchParams.family),
+    feelgood:      toLevel(searchParams.feelgood),
+    melancholic:   toLevel(searchParams.melancholic),
+    nostalgic:     toLevel(searchParams.nostalgic),
+    psychological: toLevel(searchParams.psychological),
   };
 
   const yearRange = {
