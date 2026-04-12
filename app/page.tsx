@@ -64,34 +64,37 @@ export default function Home() {
   return (
     <>
       <div className="home-wrapper">
-      <Header />
-      <FiltersSection
-        yearStart={yearRange.start}
-        yearEnd={yearRange.end}
-        onYearChange={(start, end) => setYearRange({ start, end })}
-        duration={duration}
-        onDurationChange={setDuration}
-        selectedProviders={selectedProviders}
-        onProvidersChange={setSelectedProviders}
-      />
+        <Header />
 
-      <MoodsSection
-        emotions={emotions}
-        onChange={updateEmotion}
-        rir={RIR}
-        chorar={CHORAR}
-        tense={TENSE}
-        terror={TERROR}
-        romance={ROMANCE}
-        action={ACTION}
-        adventure={ADVENTURE}
-        animation={ANIMATION}
-        family={FAMILY}
-        feelgood={FEELGOOD}
-        melancholic={MELANCHOLIC}
-        nostalgic={NOSTALGIC}
-        psychological={PSYCHOLOGICAL}
-      />
+        <MoodsSection
+          emotions={emotions}
+          onChange={updateEmotion}
+          rir={RIR}
+          chorar={CHORAR}
+          tense={TENSE}
+          terror={TERROR}
+          romance={ROMANCE}
+          action={ACTION}
+          adventure={ADVENTURE}
+          animation={ANIMATION}
+          family={FAMILY}
+          feelgood={FEELGOOD}
+          melancholic={MELANCHOLIC}
+          nostalgic={NOSTALGIC}
+          psychological={PSYCHOLOGICAL}
+        />
+
+        <FiltersSection
+          yearStart={yearRange.start}
+          yearEnd={yearRange.end}
+          onYearChange={(start, end) => setYearRange({ start, end })}
+          duration={duration}
+          onDurationChange={setDuration}
+          selectedProviders={selectedProviders}
+          onProvidersChange={setSelectedProviders}
+        />
+
+      
 
       </div>
 

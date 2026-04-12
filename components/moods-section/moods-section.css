@@ -41,12 +41,13 @@
 
 .mood-card {
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   align-items: flex-start;
   padding: var(--space-md);
   gap: var(--space-lg);
   border-radius: 16px;
   box-shadow: var(--shadow-card);
+  background: var(--color-surface-card);
 }
 
 .mood-card__title {
@@ -109,4 +110,46 @@
   background: var(--color-surface-selected);
   box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.2);
   transform: scale(1.1);
+}
+
+.mood-toggle-card{
+  background: var(--color-surface-card);
+  border-radius: 12px;
+  border: 0;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  height: 60px;
+  padding: 0 12px;
+  position: relative;
+  overflow: hidden;
+}
+
+.mood-toggle-card.mood-toggle-card--active span{
+margin: 0;
+padding: 0;
+color: #000;
+}
+
+.mood-toggle-card__effect{
+  position: absolute;
+  right: 0;
+  height: 60px;
+  transition: all 250ms ease;
+}
+
+.mood-toggle-card span{
+font-weight: 400;
+font-size: 16px;
+line-height: 100%;
+/* or 16px */
+width: 100%;
+color: #AFAFAF;
+text-align: left;
+}
+
+button .mood-toggle-card__icon{
+  width: 38px;
+  z-index: 5;
 }
