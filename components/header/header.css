@@ -8,6 +8,9 @@ header {
   align-items: flex-start;
   gap: var(--space-lg);
 }
+header img{
+  width: 200px;
+}
 
 header h1 {
   font-family: var(--font-base);

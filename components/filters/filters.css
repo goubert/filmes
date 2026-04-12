@@ -95,7 +95,6 @@
   border-radius: 12px;
   cursor: pointer;
   transition: var(--transition-base);
-  opacity: 0.5;
 }
 
 .streaming-pill img {
