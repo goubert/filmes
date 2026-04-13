@@ -13,7 +13,6 @@ type EmotionKey =
   | "animation"
   | "family"
   | "feelgood"
-  | "melancholic"
   | "nostalgic"
   | "psychological"
 
@@ -203,7 +202,7 @@ const moods: MoodItem[] = [
     effectImage: "../bg-tense.png",
     normalBg: "rgba(250, 250, 250, 0.1)",
     activeBg: "#FFEB91",
-  },
+  }
   
 ]
 
