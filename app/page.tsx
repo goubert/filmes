@@ -3,7 +3,6 @@
 import "./page.css";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-
 import { Header } from "../components/header";
 import { FiltersSection } from "../components/filters";
 import { MoodsSection } from "../components/moods-section";
