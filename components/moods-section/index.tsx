@@ -13,6 +13,7 @@ type EmotionKey =
   | "animation"
   | "family"
   | "feelgood"
+  | "melancholic"
   | "nostalgic"
   | "psychological"
 
