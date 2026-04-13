@@ -68,7 +68,7 @@ export async function discoverMoviesByEmotions(
     .map(([key]) => EMOTIONS[key as keyof typeof EMOTIONS].keywords!.join("|"))
     .join(",")
 
-  const levelConfig = EMOTION_LEVELS[mainLevel as 1 | 2 | 3]
+  const levelConfig = EMOTION_LEVELS[mainLevel as 1 | 2 | 3] ?? EMOTION_LEVELS[1]
 
   const params = new URLSearchParams({
     api_key: process.env.NEXT_PUBLIC_TMDB_KEY!,
@@ -97,13 +97,14 @@ export async function discoverMoviesByEmotions(
     params.set("with_watch_monetization_types", "flatrate")
   }
 
-  const res = await fetch(
-    `${API_URL}/discover/movie?${params.toString()}`,
-    { cache: "no-store" }
-  )
+  const url = `${API_URL}/discover/movie?${params.toString()}`
+  const [data1, data2, data3] = await Promise.all([
+    fetch(`${url}&page=1`, { cache: "no-store" }).then(r => r.json()),
+    fetch(`${url}&page=2`, { cache: "no-store" }).then(r => r.json()),
+    fetch(`${url}&page=3`, { cache: "no-store" }).then(r => r.json()),
+  ])
 
-  const data = await res.json()
-  const movies = data.results.slice(0, 30)
+  const movies = [...(data1.results ?? []), ...(data2.results ?? []), ...(data3.results ?? [])]
 
   const moviesWithDetails = await Promise.all(
     movies.map(async (movie: any) => {
