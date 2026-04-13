@@ -12,6 +12,22 @@ export default function RootLayout({
   return (
     <html lang="en">
       <head>
+        <link rel="preload" as="image" href="/bg-laugh.png" />
+        <link rel="preload" as="image" href="/bg-action.png" />
+        <link rel="preload" as="image" href="/bg-cry.png" />
+        <link rel="preload" as="image" href="/bg-romance.png" />
+        <link rel="preload" as="image" href="/bg-scary.png" />
+        <link rel="preload" as="image" href="/bg-adventure.png" />
+        <link rel="preload" as="image" href="/bg-psichological.png" />
+        <link rel="preload" as="image" href="/bg-tense.png" />
+        <link rel="preload" as="image" href="/emoji-laugh.png" />
+        <link rel="preload" as="image" href="/emoji-action.png" />
+        <link rel="preload" as="image" href="/emoji-cry.png" />
+        <link rel="preload" as="image" href="/emoji-romance.png" />
+        <link rel="preload" as="image" href="/emoji-scary.png" />
+        <link rel="preload" as="image" href="/emoji-adventure.png" />
+        <link rel="preload" as="image" href="/emoji-psichological.png" />
+        <link rel="preload" as="image" href="/emoji-tense.png" />
         <Script type="text/javascript">
           {`
           (function(c,l,a,r,i,t,y){
