@@ -24,7 +24,8 @@ export async function discoverMoviesByEmotions(
   yearRange: { start: number; end: number },
   countries: string[],
   duration: string | null = null,
-  providerIds: number[] = []
+  providerIds: number[] = [],
+  page: number = 1
 ) {
   const sorted = Object.entries(emotions).sort((a, b) => b[1] - a[1])
   const [mainEmotion, mainLevel] = sorted[0]
@@ -98,13 +99,8 @@ export async function discoverMoviesByEmotions(
   }
 
   const url = `${API_URL}/discover/movie?${params.toString()}`
-  const [data1, data2, data3] = await Promise.all([
-    fetch(`${url}&page=1`, { cache: "no-store" }).then(r => r.json()),
-    fetch(`${url}&page=2`, { cache: "no-store" }).then(r => r.json()),
-    fetch(`${url}&page=3`, { cache: "no-store" }).then(r => r.json()),
-  ])
-
-  const movies = [...(data1.results ?? []), ...(data2.results ?? []), ...(data3.results ?? [])]
+  const data = await fetch(`${url}&page=${page}`, { cache: "no-store" }).then(r => r.json())
+  const movies = data.results ?? []
 
   const moviesWithDetails = await Promise.all(
     movies.map(async (movie: any) => {
