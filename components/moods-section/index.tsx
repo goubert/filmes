@@ -23,7 +23,6 @@ type MoodItem = {
   image: string
   activeImage?: string
   effectImage?: string
-  normalBg: string
   activeBg: string
   textColor?: string
   premium?: boolean
@@ -41,7 +40,6 @@ type MoodToggleCardProps = {
   image: string
   activeImage?: string
   effectImage?: string
-  normalBg: string
   activeBg: string
   textColor?: string
   premium?: boolean
@@ -54,7 +52,6 @@ function MoodToggleCard({
   image,
   activeImage,
   effectImage,
-  normalBg,
   activeBg,
   textColor = "#fff",
   premium = true,
@@ -69,7 +66,7 @@ function MoodToggleCard({
       className={`mood-toggle-card${value ? " mood-toggle-card--active" : ""}`}
       onClick={() => onChange(!value)}
       style={{
-        backgroundColor: value ? activeBg : normalBg,
+        backgroundColor: value ? activeBg : undefined,
         color: textColor,
       }}
       aria-pressed={value}
@@ -101,7 +98,7 @@ const moods: MoodItem[] = [
     image: "../emoji-laugh.png",
     activeImage: "../emoji-laugh.png",
     effectImage: "../bg-laugh.png",
-    normalBg: "rgba(250, 250, 250, 0.1)",
+    
     activeBg: "#FFC817",
   },
   {
@@ -110,7 +107,7 @@ const moods: MoodItem[] = [
     image: "../emoji-action.png",
     activeImage: "../emoji-action.png",
     effectImage: "../bg-action.png",
-    normalBg: "rgba(250, 250, 250, 0.1)",
+    
     activeBg: "#FC5252",
   },
   {
@@ -119,7 +116,7 @@ const moods: MoodItem[] = [
     image: "../emoji-cry.png",
     activeImage: "../emoji-cry.png",
     effectImage: "../bg-cry.png",
-    normalBg: "rgba(250, 250, 250, 0.1)",
+    
     activeBg: "#F7468E",
     textColor: "#202020",
   },
@@ -129,7 +126,7 @@ const moods: MoodItem[] = [
     image: "../emoji-romance.png",
     activeImage: "../emoji-romance.png",
     effectImage: "../bg-romance.png",
-    normalBg: "rgba(250, 250, 250, 0.1)",
+    
     activeBg: "#45FFF6",
   },
   {
@@ -138,7 +135,7 @@ const moods: MoodItem[] = [
     image: "../emoji-scary.png",
     activeImage: "../emoji-scary.png",
     effectImage: "../bg-scary.png",
-    normalBg: "rgba(250, 250, 250, 0.1)",
+    
     activeBg: "#8D5EFF",
   },
   {
@@ -147,7 +144,7 @@ const moods: MoodItem[] = [
     image: "../emoji-adventure.png",
     activeImage: "../emoji-adventure.png",
     effectImage: "../bg-adventure.png",
-    normalBg: "rgba(250, 250, 250, 0.1)",
+    
     activeBg: "#96DFFF",
   },
   {
@@ -156,7 +153,7 @@ const moods: MoodItem[] = [
     image: "../emoji-family.png",
     activeImage: "../emoji-family.png",
     effectImage: "../bg-family.png",
-    normalBg: "rgba(250, 250, 250, 0.1)",
+    
     activeBg: "#16DC90",
   },
   {
@@ -165,25 +162,25 @@ const moods: MoodItem[] = [
     image: "../emoji-animation.png",
     activeImage: "../emoji-animation.png",
     effectImage: "../bg-animation.png",
-    normalBg: "rgba(250, 250, 250, 0.1)",
+    
     activeBg: "#9BFF6D",
   },
   {
     key: "feelgood",
     title: "Feel Good",
-    image: "../emoji-scary.png",
-    activeImage: "../emoji-scary.png",
-    effectImage: "../bg-scary.png",
-    normalBg: "rgba(250, 250, 250, 0.1)",
+    image: "../emoji-feelgood.png",
+    activeImage: "../emoji-feelgood.png",
+    effectImage: "../bg-feelgood.png",
+    
     activeBg: "#FF8A3C",
   },
   {
     key: "nostalgic",
     title: "Nostalgia",
-    image: "../emoji-scary.png",
-    activeImage: "../emoji-scary.png",
-    effectImage: "../bg-scary.png",
-    normalBg: "rgba(250, 250, 250, 0.1)",
+    image: "../emoji-nostalgic.png",
+    activeImage: "../emoji-nostalgic.png",
+    effectImage: "../bg-nostalgic.png",
+    
     activeBg: "#DFCABB",
   },
   {
@@ -192,7 +189,7 @@ const moods: MoodItem[] = [
     image: "../emoji-psichological.png",
     activeImage: "../emoji-psichological.png",
     effectImage: "../bg-psichological.png",
-    normalBg: "rgba(250, 250, 250, 0.1)",
+    
     activeBg: "#FFFFFF",
   },
   {
@@ -201,7 +198,7 @@ const moods: MoodItem[] = [
     image: "../emoji-tense.png",
     activeImage: "../emoji-tense.png",
     effectImage: "../bg-tense.png",
-    normalBg: "rgba(250, 250, 250, 0.1)",
+    
     activeBg: "#FFEB91",
   }
   
@@ -227,7 +224,6 @@ export function MoodsSection({
             image={mood.image}
             activeImage={mood.activeImage}
             effectImage={mood.effectImage}
-            normalBg={mood.normalBg}
             activeBg={mood.activeBg}
             textColor={mood.textColor}
             premium={mood.premium}
