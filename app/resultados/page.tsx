@@ -1,7 +1,7 @@
 import "./resultados.css";
-import { Cardmovie } from "@/components/cardmovie";
 import { discoverMoviesByEmotions, getStreamingProvidersBR } from "@/lib/tmdb";
 import { ResultadosFilterBar } from "@/components/resultados-filter-bar";
+import { MovieList } from "./MovieList";
 
 type SearchParams = {
   laugh?: string;
@@ -60,7 +60,7 @@ export default async function ResultadosPage({
 
   const [[movies], streamingProviders] = await Promise.all([
     Promise.all([
-      discoverMoviesByEmotions(emotions, yearRange, [], duration, providerIds),
+      discoverMoviesByEmotions(emotions, yearRange, [], duration, providerIds, 1),
       new Promise((r) => setTimeout(r, 1000)),
     ]),
     getStreamingProvidersBR(),
@@ -77,15 +77,10 @@ export default async function ResultadosPage({
         streamingProviders={streamingProviders}
       />
 
-      {movies.length === 0 ? (
-        <p className="resultados__empty">Nenhum filme encontrado. Tente ajustar os filtros.</p>
-      ) : (
-        <section className="list-movies">
-          {movies.map((movie: any) => (
-            <Cardmovie key={movie.id} movie={movie} />
-          ))}
-        </section>
-      )}
+      <MovieList
+        initialMovies={movies}
+        searchParams={searchParams as Record<string, string>}
+      />
     </main>
   );
 }
