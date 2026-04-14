@@ -126,10 +126,13 @@
   overflow: hidden;
   transition: all 300ms ease;
   cursor: pointer;
+  touch-action: unset;
 }
 .mood-toggle-card:hover{
   background: var(--color-surface-card-hover);
 }
+
+
 
 .mood-toggle-card.mood-toggle-card--active span{
 margin: 0;
