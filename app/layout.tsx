@@ -20,6 +20,8 @@ export default function RootLayout({
         <link rel="preload" as="image" href="/bg-adventure.png" />
         <link rel="preload" as="image" href="/bg-psichological.png" />
         <link rel="preload" as="image" href="/bg-tense.png" />
+        <link rel="preload" as="image" href="/bg-family.png" />
+        <link rel="preload" as="image" href="/bg-animation.png" />
         <link rel="preload" as="image" href="/emoji-laugh.png" />
         <link rel="preload" as="image" href="/emoji-action.png" />
         <link rel="preload" as="image" href="/emoji-cry.png" />
@@ -28,6 +30,8 @@ export default function RootLayout({
         <link rel="preload" as="image" href="/emoji-adventure.png" />
         <link rel="preload" as="image" href="/emoji-psichological.png" />
         <link rel="preload" as="image" href="/emoji-tense.png" />
+        <link rel="preload" as="image" href="/emoji-family.png" />
+        <link rel="preload" as="image" href="/emoji-animation.png" />
         <Script type="text/javascript">
           {`
           (function(c,l,a,r,i,t,y){
