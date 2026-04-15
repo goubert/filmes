@@ -15,6 +15,10 @@ type Movie = {
   vote_average: number;
   streaming: StreamingProvider[];
 };
+type Props = {
+  movie: Movie;
+  onOpen: (movieId: number) => void;
+};
 
 function formatRuntime(minutes: number): string {
   const h = Math.floor(minutes / 60);
@@ -22,12 +26,14 @@ function formatRuntime(minutes: number): string {
   return h > 0 ? `${h}h ${m}m` : `${m}m`;
 }
 
-export function Cardmovie({ movie }: { movie: Movie }) {
+
+
+export function Cardmovie({ movie , onOpen}: Props) {
   const percent = Math.round(movie.vote_average * 10);
   const year = movie.release_date?.split("-")[0];
 
   return (
-    <div className="card-movie">
+    <div className="card-movie" onClick={() => onOpen(movie.id)}>
       <div className="card-movie__poster">
         <div className="card-movie__badge" style={{ ["--percent" as any]: `${percent}%` }}>
           <span>{percent}</span>

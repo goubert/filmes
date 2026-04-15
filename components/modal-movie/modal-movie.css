@@ -1,0 +1,246 @@
+.movie-modal-overlay{
+    position:fixed;
+    inset:0;
+    background:rgba(0,0,0,.7);
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    z-index:999;
+    }
+    
+    .movie-modal{
+    width:90%;
+    max-width:760px;
+    max-height:90vh;
+    overflow:auto;
+    background:#181515;
+    border-radius:24px;
+    color:white;
+    z-index: 9999;
+    border: 1px solid  rgba(250,250,250,.2);
+    }
+
+    .btn-fechar{
+        width: fit-content;
+        border-radius: 50%;
+        backdrop-filter: blur(32px);
+        background: rgba(250,250,250,.1);
+        border: 1px solid rgba(250,250,250,.1);
+        padding: 8px 8px 4px 8px;
+        transition: all 250ms ease;
+        position: absolute;
+        top: 16px;
+        right: 16px;
+        z-index: 990;
+    }
+    .btn-fechar:hover{
+        background: rgba(250,250,250,.2);
+    }
+
+    .header-movie{
+        display: flex;
+        flex-direction: column;
+        height: 162px;
+        position: relative;
+        z-index: 80;
+    }
+    .header-movie::before{
+        position: absolute;
+        content: "";
+        width: 100%;
+        height: 100%;
+        z-index: 99;
+        bottom: 0;
+        
+        background: linear-gradient(212.72deg, rgba(24, 21, 21, 0) 0.54%, rgba(24, 21, 21, 0.78) 36.46%, #181515 66.11%);
+
+    }
+    .header-movie::after{
+        position: absolute;
+        content: "";
+        width: 100%;
+        height: 100%;
+        z-index: 99;
+        bottom: 0;
+        background: linear-gradient(180deg, rgba(24, 21, 21, 0) 0%, #181515 100%);
+    }
+
+    .header-movie img.backdrop-poster{
+        position: absolute;
+        right: 0;
+        top: 0;
+        width: 95%;
+        height: 100%;
+        z-index: 10;
+        object-fit: cover;
+        object-position: 60px -60px;
+    }
+
+    .info-movie-poster{
+        display: flex;
+        flex: row;
+        gap: 16px;
+        z-index: 100;
+        padding: 24px;
+    }
+
+    .info-movie-poster .text-info-movie{
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+        height: 100%;
+        align-items: baseline;
+        justify-content: end;
+    }
+
+    .info-movie-poster h2{
+        z-index: 99;
+        font-weight: 500;
+        font-size: 18px;
+        line-height: 130%;
+        color: #FCFF81;
+    }
+
+    .info-movie-poster img.poster-movie{
+        width: 100px;
+        border-radius: 8px;
+    }
+
+    .more-info-text{
+        display: flex;
+        flex-direction: row;
+        gap: 8px;
+        align-items: center;
+        
+    }
+
+    .classificacao-movie{
+        border: 1px solid #75615E;
+        border-radius: 2px;
+        padding: 1px 4px;
+        font-weight: 400;
+        font-size: 12px;
+        color: #75615E;
+
+    }
+
+    .release-movie , .movie-time{
+        font-weight: 400;
+        font-size: 12px;
+        line-height: 130%;
+        color: #FAF0EC;
+    }
+    .generos-movie{
+        display: flex;
+        flex-direction: row;
+        gap: 4px;
+
+    }
+    .generos-movie span{
+        padding: 2px 6px;
+        background: rgba(250,250,250,.1);
+        backdrop-filter: blur(20px);
+        font-weight: 400;
+        font-size: 12px;
+        line-height: 130%;
+        color: #FAF0EC;
+        border-radius: 4px;
+    }
+
+    .content-modal-movie{
+        padding: 24px;
+        display: flex;
+        flex-direction: column;
+        gap: 32px;
+    }
+
+
+    .movie-modal__cast-list{
+        width: 100%;
+        display: flex;
+        flex-direction: row;
+        gap: 12px;
+        overflow-y: hidden;
+    }
+        .movie-modal__cast-list::after{
+            position: absolute;
+            top: 0;
+            right: 0;
+            z-index: 99;
+            background: linear-gradient(90deg, rgba(24, 21, 21, 0) 0%, #181515 100%);
+            content: "";
+        }
+
+    .sinopse-movie, .elenco-movie, .equipe-movie{
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+    }
+        .sinopse-movie h4, .elenco-movie h4, .equipe-movie h4{
+            font-size: 16px;
+            font-weight: 500;
+        }
+        .sinopse-movie p{
+            font-size: 12px;
+            font-weight: 300;
+            line-height: 1.4;
+            letter-spacing: 0.05em;
+            color: #968979;
+        }
+    .elenco-movie p{
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+    }
+
+    .equipe-movie .list-equipe{
+        display: flex;
+        flex-direction: row;
+        justify-content: space-evenly;
+        align-items: flex-start;
+    }
+
+    .equipe-movie .list-equipe p > strong{
+        color: #968979;
+    }
+
+    .equipe-movie .list-equipe p{
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+        flex-grow: 1;
+        flex-shrink: 1;
+        width: 100%;
+        font-size: 12px;
+            font-weight: 300;
+            line-height: 1.4;
+            letter-spacing: 0.05em;
+            color: #fff;
+    }
+
+    .movie-modal__cast-card{
+        width: 64px;
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+        flex-shrink: 1;
+    }
+        .movie-modal__cast-card img{
+            height: 82px;
+            width: 64px;
+            object-fit: cover;
+            border-radius: 8px;
+        }
+        .movie-modal__cast-card strong{
+            font-size: 12px;
+            font-weight: 400;
+            line-height: 1.2;
+            color: #FAF0EC;
+        }
+
+        .movie-modal__cast-card span{
+            font-size: 12px;
+            font-weight: 300;
+            line-height: 1.2;
+            color: #968979;
+        }
