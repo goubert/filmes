@@ -2,11 +2,15 @@
 
 import { useEffect, useRef, useState } from "react"
 import { Cardmovie } from "@/components/cardmovie"
+import { MovieModal } from "@/components/modal-movie"
 
 type Props = {
   initialMovies: any[]
   searchParams: Record<string, string>
 }
+
+
+
 
 export function MovieList({ initialMovies, searchParams }: Props) {
   const [movies, setMovies] = useState(initialMovies)
@@ -14,6 +18,14 @@ export function MovieList({ initialMovies, searchParams }: Props) {
   const [loading, setLoading] = useState(false)
   const [hasMore, setHasMore] = useState(true)
   const sentinelRef = useRef<HTMLDivElement>(null)
+  const [selectedMovieId, setSelectedMovieId] = useState<number | null>(null);
+
+  const openMovie = (id: number) => {
+    console.log("clicou filme:", id);
+    setSelectedMovieId(id);
+  };
+
+  const closeMovie = () => setSelectedMovieId(null);
 
   useEffect(() => {
     setMovies(initialMovies)
@@ -63,9 +75,16 @@ export function MovieList({ initialMovies, searchParams }: Props) {
     <>
       <section className="list-movies">
         {movies.map((movie: any) => (
-          <Cardmovie key={movie.id} movie={movie} />
+          <Cardmovie key={movie.id} movie={movie} onOpen={openMovie}/>
         ))}
       </section>
+      
+      {selectedMovieId && (
+        <MovieModal
+          movieId={selectedMovieId}
+          onClose={closeMovie}
+        />
+      )}
 
       {hasMore && (
         <div ref={sentinelRef} style={{ height: 1 }} />

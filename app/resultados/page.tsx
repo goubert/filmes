@@ -3,6 +3,7 @@ import { discoverMoviesByEmotions, getStreamingProvidersBR } from "@/lib/tmdb";
 import { ResultadosFilterBar } from "@/components/resultados-filter-bar";
 import { MovieList } from "./MovieList";
 
+
 type SearchParams = {
   laugh?: string;
   cry?: string;
@@ -22,6 +23,7 @@ type SearchParams = {
   duration?: string;
   providers?: string;
 };
+
 
 export default async function ResultadosPage({
   searchParams,
