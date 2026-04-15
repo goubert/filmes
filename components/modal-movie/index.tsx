@@ -75,10 +75,17 @@ export function MovieModal({ movieId, onClose }: Props) {
         setLoading(false);
       }
     }
+    
 
     loadMovie();
   }, [movieId]);
+  useEffect(() => {
+    document.body.style.overflow = "hidden";
   
+    return () => {
+      document.body.style.overflow = "auto";
+    };
+  }, []);
 
   function formatRuntime(minutes: number) {
     const h = Math.floor(minutes / 60);
