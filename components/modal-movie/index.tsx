@@ -186,6 +186,7 @@ export function MovieModal({ movieId, onClose }: Props) {
                     <h4>Elenco</h4>
 
                     <div className="movie-modal__cast-list">
+                        <span className="mask-left"></span>
                         {movie.credits.cast.slice(0, 12).map((actor) => (
                         <div
                             className="movie-modal__cast-card"
@@ -205,6 +206,7 @@ export function MovieModal({ movieId, onClose }: Props) {
                             <span>{actor.character}</span>
                         </div>
                         ))}
+                        <span className="mask-right"></span>
                     </div>
 
                     <div className="equipe-movie">
