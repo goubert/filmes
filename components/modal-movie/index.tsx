@@ -122,7 +122,7 @@ export function MovieModal({ movieId, onClose }: Props) {
   if (loading) {
     return (
       <div className="movie-modal-overlay">
-        <div className="movie-modal">Carregando...</div>
+        <div className="movie-modal"><div className="loading-movie">Carregando...</div></div>
       </div>
     );
   }
