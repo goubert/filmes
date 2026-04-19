@@ -1,4 +1,5 @@
 import "./globals.css";
+import "@/components/modal-movie/modal-movie.css";
 import Script from "next/script";
 export const metadata ={
   title: "Moovie Finder",

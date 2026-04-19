@@ -1,8 +1,6 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import "./modal-movie.css";
-import "@/components/cardmovie/cardmovie.css";
 
 
 type Props = {
