@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react"
 import { Cardmovie } from "@/components/cardmovie"
 import { MovieModal } from "@/components/modal-movie"
 
+
 type Props = {
   initialMovies: any[]
   searchParams: Record<string, string>
