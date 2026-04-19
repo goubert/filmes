@@ -3,7 +3,7 @@
 import "./page.css";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { Header } from "../components/header";
+import { AppHeader } from "../components/app-header";
 import { FiltersSection } from "../components/filters";
 import { MoodsSection } from "../components/moods-section";
 
@@ -78,7 +78,9 @@ export default function Home() {
   return (
     <>
       <div className="home-wrapper">
-        <Header />
+        <AppHeader align="start">
+          <h1>Busque filmes de acordo com o seu humor.</h1>
+        </AppHeader>
 
         <MoodsSection
           emotions={emotions}
