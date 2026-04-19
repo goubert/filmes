@@ -4,11 +4,26 @@ export async function GET(
   req: Request,
   { params }: { params: { id: string } }
 ) {
-  const res = await fetch(
-    `https://api.themoviedb.org/3/movie/${params.id}?api_key=${process.env.NEXT_PUBLIC_TMDB_KEY}&language=pt-BR&append_to_response=credits,release_dates`
+  const id = params.id;
+
+  const movieRes = await fetch(
+    `https://api.themoviedb.org/3/movie/${id}?api_key=${process.env.NEXT_PUBLIC_TMDB_KEY}&language=pt-BR&append_to_response=credits,release_dates`
   );
 
-  const data = await res.json();
+  const providerRes = await fetch(
+    `https://api.themoviedb.org/3/movie/${id}/watch/providers?api_key=${process.env.NEXT_PUBLIC_TMDB_KEY}`
+  );
 
-  return NextResponse.json(data);
+  const movie = await movieRes.json();
+  const providers = await providerRes.json();
+
+  const streaming =
+    providers.results?.BR?.flatrate ||
+    providers.results?.US?.flatrate ||
+    [];
+
+  return NextResponse.json({
+    ...movie,
+    streaming,
+  });
 }
