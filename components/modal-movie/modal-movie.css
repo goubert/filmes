@@ -43,6 +43,7 @@
         bottom: 16px;
         left: 50%;
         margin: 0 auto;
+        transform: translateX(-50%);
         z-index: 990;
     }
     .btn-fechar:hover{
@@ -280,3 +281,24 @@
     width: 100%;
     text-align: center;
 }
+
+/* Streaming logos */
+.card-movie__streaming-modal {
+    display: flex;
+    flex-direction: row;
+    gap: 4px;
+    margin-top: 2px;
+  }
+  
+  .card-movie__streaming-logo-modal {
+    width: 40px;
+    height: 40px;
+    border-radius: 4px;
+    object-fit: cover;
+  }
+
+  .streamings-list{
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
