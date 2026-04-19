@@ -19,7 +19,20 @@ const DURATION_OPTIONS = [
   { label: "Qualquer",      value: null     },
 ];
 
-const POPULAR_IDS = [8, 119, 337, 1899, 307, 531, 350];
+const MOOD_IMAGES: Record<string, string> = {
+  laugh:         "/emoji-laugh.png",
+  action:        "/emoji-action.png",
+  cry:           "/emoji-cry.png",
+  romance:       "/emoji-romance.png",
+  scary:         "/emoji-scary.png",
+  adventure:     "/emoji-adventure.png",
+  family:        "/emoji-family.png",
+  animation:     "/emoji-animation.png",
+  feelgood:      "/emoji-feelgood.png",
+  nostalgic:     "/emoji-nostalgic.png",
+  psychological: "/emoji-psichological.png",
+  tense:         "/emoji-tense.png",
+};
 
 type Provider = {
   provider_id: number;
@@ -28,7 +41,19 @@ type Provider = {
 };
 
 type Emotions = {
-  laugh: number; cry: number; tense: number; scary: number; romance: number;
+  laugh: number;
+  cry: number;
+  tense: number;
+  scary: number;
+  romance: number;
+  action: number;
+  adventure: number;
+  animation: number;
+  family: number;
+  feelgood: number;
+  melancholic: number;
+  nostalgic: number;
+  psychological: number;
 };
 
 type Props = {
@@ -48,55 +73,56 @@ function getDurationLabel(duration: string | null) {
   return DURATION_OPTIONS.find(d => d.value === duration)?.label ?? "Qualquer";
 }
 
-function getStreamingLabel(selected: number[], providers: Provider[]) {
-  if (selected.length === 0) return "Streaming";
-  if (selected.length === 1)
-    return providers.find(p => p.provider_id === selected[0])?.provider_name ?? "Streaming";
-  return `${providers.find(p => p.provider_id === selected[0])?.provider_name} +${selected.length - 1}`;
-}
-
 export function ResultadosFilterBar({
-  emotions, yearStart, yearEnd, duration, selectedProviders, streamingProviders,
+  emotions, yearStart, yearEnd, duration, selectedProviders,
 }: Props) {
   const router = useRouter();
-  const [open, setOpen] = useState<"year" | "duration" | "streaming" | null>(null);
-  const [pendingProviders, setPendingProviders] = useState<number[]>(selectedProviders);
-  const [popupPos, setPopupPos] = useState<{ top: number; left: number }>({ top: 0, left: 0 });
+  const [open, setOpen] = useState<"year" | "duration" | null>(null);
+  const [popupPos, setPopupPos] = useState<{ bottom: number; left: number }>({ bottom: 0, left: 0 });
 
   const yearRef     = useRef<HTMLButtonElement>(null);
   const durationRef = useRef<HTMLButtonElement>(null);
-  const streamingRef = useRef<HTMLButtonElement>(null);
 
-  function openPopup(type: "year" | "duration" | "streaming", ref: React.RefObject<HTMLButtonElement>) {
+  const activeMoods = Object.entries(emotions)
+    .filter(([, v]) => v > 0)
+    .map(([key]) => key);
+
+  const visibleMoods = activeMoods.slice(0, 3);
+  const extraMoods   = activeMoods.length - visibleMoods.length;
+
+  function openPopup(type: "year" | "duration", ref: React.RefObject<HTMLButtonElement>) {
     if (ref.current) {
       const rect = ref.current.getBoundingClientRect();
-      const popupWidth = type === "streaming" ? 252 : 192;
+      const popupWidth = 177;
       const margin = 12;
       const vw = window.innerWidth;
 
-      // Tenta alinhar à esquerda do botão; se vazar pela direita, alinha à direita do botão
       let left = rect.left;
-      if (left + popupWidth > vw - margin) {
-        left = rect.right - popupWidth;
-      }
-      // Clamp final: nunca sai pelos dois lados
+      if (left + popupWidth > vw - margin) left = rect.right - popupWidth;
       left = Math.max(margin, Math.min(left, vw - popupWidth - margin));
 
-      setPopupPos({ top: rect.bottom + 8, left });
+      setPopupPos({ bottom: window.innerHeight - rect.top + 8, left });
     }
-    if (type === "streaming") setPendingProviders(selectedProviders);
     setOpen(prev => prev === type ? null : type);
   }
 
   function navigate(year: { start: number; end: number }, dur: string | null, providers: number[]) {
     const p = new URLSearchParams({
-      laugh:     String(emotions.laugh),
-      cry:       String(emotions.cry),
-      tense:     String(emotions.tense),
-      scary:     String(emotions.scary),
-      romance:   String(emotions.romance),
-      yearStart: String(year.start),
-      yearEnd:   String(year.end),
+      laugh:         String(emotions.laugh),
+      cry:           String(emotions.cry),
+      tense:         String(emotions.tense),
+      scary:         String(emotions.scary),
+      romance:       String(emotions.romance),
+      action:        String(emotions.action),
+      adventure:     String(emotions.adventure),
+      animation:     String(emotions.animation),
+      family:        String(emotions.family),
+      feelgood:      String(emotions.feelgood),
+      melancholic:   String(emotions.melancholic),
+      nostalgic:     String(emotions.nostalgic),
+      psychological: String(emotions.psychological),
+      yearStart:     String(year.start),
+      yearEnd:       String(year.end),
     });
     if (dur) p.set("duration", dur);
     if (providers.length) p.set("providers", providers.join(","));
@@ -108,45 +134,78 @@ export function ResultadosFilterBar({
 
   return (
     <>
-      {/* Overlay to close popup */}
       {open && <div className="rfb__overlay" onClick={() => setOpen(null)} />}
 
-      <div className="rfb-scroll">
-        <div className="rfb">
-          {/* Home button */}
-          <button className="rfb__home" onClick={() => router.push("/")}>
-            <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
-              <path d="M1.5 7.5L9 1.5L16.5 7.5V16.5H11.5V11.5H6.5V16.5H1.5V7.5Z" stroke="#000000" strokeWidth="1.5" strokeLinejoin="round" strokeLinecap="round"/>
-            </svg>
-          </button>
+      <div className="rfb-bar">
+        <button className="rfb__back" onClick={() => router.push("/")}>
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
+            <path d="M9 14L4 9L9 4" stroke="#000" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"/>
+            <path d="M4 9H15C17.761 9 20 11.239 20 14C20 16.761 17.761 19 15 19H12" stroke="#000" strokeWidth="2.2" strokeLinecap="round"/>
+          </svg>
+        </button>
 
-          {/* Year pill */}
-          <button ref={yearRef} className="rfb__pill" onClick={() => openPopup("year", yearRef)}>
-            <span className="rfb__pill-label">{getYearLabel(yearStart, yearEnd)}</span>
-            <span className="rfb__pill-icon"><PencilIcon /></span>
-          </button>
+        <div className="rfb-scroll">
+          <div className="rfb">
+            {/* MOODS */}
+            <button className="rfb__card">
+              <div className="rfb__card-header">
+                <span className="rfb__card-label">MOODS</span>
+                <ChevronUp />
+              </div>
+              <div className="rfb__mood-icons">
+                {visibleMoods.map(key => (
+                  MOOD_IMAGES[key] && (
+                    <img
+                      key={key}
+                      src={MOOD_IMAGES[key]}
+                      alt={key}
+                      className="rfb__mood-icon"
+                    />
+                  )
+                ))}
+                {extraMoods > 0 && (
+                  <span className="rfb__mood-extra">+{extraMoods}</span>
+                )}
+                {activeMoods.length === 0 && (
+                  <span className="rfb__card-value">Todos</span>
+                )}
+              </div>
+            </button>
 
-          {/* Duration pill */}
-          <button ref={durationRef} className="rfb__pill" onClick={() => openPopup("duration", durationRef)}>
-            <span className="rfb__pill-label">{getDurationLabel(duration)}</span>
-            <span className="rfb__pill-icon"><PencilIcon /></span>
-          </button>
+            {/* PERÍODO */}
+            <button ref={yearRef} className="rfb__card rfb__card--period" onClick={() => openPopup("year", yearRef)}>
+              <div className="rfb__card-header">
+                <span className="rfb__card-label">PERÍODO</span>
+                <ChevronUp />
+              </div>
+              <span className="rfb__card-value">{getYearLabel(yearStart, yearEnd)}</span>
+            </button>
 
-          {/* Streaming pill */}
-          <button
-            ref={streamingRef}
-            className={`rfb__pill${selectedProviders.length > 0 ? " rfb__pill--active" : ""}`}
-            onClick={() => openPopup("streaming", streamingRef)}
-          >
-            <span className="rfb__pill-label">{getStreamingLabel(selectedProviders, streamingProviders)}</span>
-            <span className="rfb__pill-icon"><PencilIcon /></span>
-          </button>
+            {/* DURAÇÃO */}
+            <button ref={durationRef} className="rfb__card rfb__card--duration" onClick={() => openPopup("duration", durationRef)}>
+              <div className="rfb__card-header">
+                <span className="rfb__card-label">DURAÇÃO</span>
+                <ChevronUp />
+              </div>
+              <span className="rfb__card-value">{getDurationLabel(duration)}</span>
+            </button>
+
+            {/* SERVIÇOS */}
+            <button className="rfb__card">
+              <div className="rfb__card-header">
+                <span className="rfb__card-label">SERVIÇOS</span>
+                <ChevronUp />
+              </div>
+              <span className="rfb__card-value">
+                {selectedProviders.length > 0 ? `${selectedProviders.length} ativo${selectedProviders.length > 1 ? "s" : ""}` : "Todos"}
+              </span>
+            </button>
+          </div>
         </div>
       </div>
 
-      {/* Popups — fixed, outside scroll container */}
       {open === "year" && (
-        <div className="rfb__popup" style={{ top: popupPos.top, left: popupPos.left }}>
+        <div className="rfb__popup" style={{ bottom: popupPos.bottom, left: popupPos.left }}>
           {YEAR_PRESETS.map(p => (
             <button
               key={p.label}
@@ -160,7 +219,7 @@ export function ResultadosFilterBar({
       )}
 
       {open === "duration" && (
-        <div className="rfb__popup" style={{ top: popupPos.top, left: popupPos.left }}>
+        <div className="rfb__popup" style={{ bottom: popupPos.bottom, left: popupPos.left }}>
           {DURATION_OPTIONS.map(opt => (
             <button
               key={String(opt.value)}
@@ -172,71 +231,14 @@ export function ResultadosFilterBar({
           ))}
         </div>
       )}
-
-      {open === "streaming" && (
-        <div className="rfb__popup rfb__popup--streaming" style={{ top: popupPos.top, left: popupPos.left }}>
-          <StreamingPopup
-            providers={streamingProviders}
-            pending={pendingProviders}
-            onToggle={(id) => setPendingProviders(prev =>
-              prev.includes(id) ? prev.filter(p => p !== id) : [...prev, id]
-            )}
-            onApply={() => navigate(currentYear, duration, pendingProviders)}
-          />
-        </div>
-      )}
     </>
   );
 }
 
-function StreamingPopup({ providers, pending, onToggle, onApply }: {
-  providers: Provider[];
-  pending: number[];
-  onToggle: (id: number) => void;
-  onApply: () => void;
-}) {
-  const [showAll, setShowAll] = useState(false);
-
-  const popular = providers
-    .filter(p => POPULAR_IDS.includes(p.provider_id))
-    .sort((a, b) => POPULAR_IDS.indexOf(a.provider_id) - POPULAR_IDS.indexOf(b.provider_id));
-
-  const visible = showAll ? providers : popular;
-
-  return (
-    <>
-      <div className="rfb__streaming-grid">
-        {visible.map(provider => (
-          <button
-            key={provider.provider_id}
-            className={`rfb__streaming-option${pending.includes(provider.provider_id) ? " rfb__streaming-option--selected" : ""}`}
-            onClick={() => onToggle(provider.provider_id)}
-          >
-            <img
-              src={`https://image.tmdb.org/t/p/original${provider.logo_path}`}
-              alt={provider.provider_name}
-              width={40}
-              height={40}
-            />
-          </button>
-        ))}
-      </div>
-      {!showAll && (
-        <button className="rfb__streaming-more" onClick={() => setShowAll(true)}>
-          Ver mais opções
-        </button>
-      )}
-      <button className="rfb__streaming-apply" onClick={onApply}>
-        {pending.length === 0 ? "Ver todos" : "Ver filmes"}
-      </button>
-    </>
-  );
-}
-
-function PencilIcon() {
+function ChevronUp() {
   return (
     <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
-      <path d="M8.5 1.5L10.5 3.5L3.5 10.5H1.5V8.5L8.5 1.5Z" stroke="#969696" strokeWidth="1" strokeLinejoin="round" strokeLinecap="round"/>
+      <path d="M2 8L6 4L10 8" stroke="#686868" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
     </svg>
   );
 }

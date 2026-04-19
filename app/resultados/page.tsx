@@ -1,4 +1,5 @@
 import "./resultados.css";
+import "./resultados-layout.css";
 import { discoverMoviesByEmotions, getStreamingProvidersBR } from "@/lib/tmdb";
 import { ResultadosFilterBar } from "@/components/resultados-filter-bar";
 import { MovieList } from "./MovieList";
@@ -69,20 +70,25 @@ export default async function ResultadosPage({
   ]);
 
   return (
+    <>
+    <div className="resultados-found-wrapper">
+      <p className="resultados-found-label">Filmes encontrados:</p>
+    </div>
+    <div className="resultados-separator" />
     <main className="resultados">
-      <ResultadosFilterBar
-        emotions={emotions}
-        yearStart={yearRange.start}
-        yearEnd={yearRange.end}
-        duration={duration}
-        selectedProviders={providerIds}
-        streamingProviders={streamingProviders}
-      />
-
       <MovieList
         initialMovies={movies}
         searchParams={searchParams as Record<string, string>}
       />
     </main>
+    <ResultadosFilterBar
+      emotions={emotions}
+      yearStart={yearRange.start}
+      yearEnd={yearRange.end}
+      duration={duration}
+      selectedProviders={providerIds}
+      streamingProviders={streamingProviders}
+    />
+    </>
   );
 }

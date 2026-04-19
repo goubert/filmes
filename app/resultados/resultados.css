@@ -1,7 +1,7 @@
 /* ─── Page: Resultados ───────────────────────────────── */
 
 .resultados {
-  padding: var(--space-md) 0;
+  padding: var(--space-md) 0 87px;
   display: flex;
   flex-direction: column;
   gap: var(--space-lg);
@@ -13,7 +13,6 @@
   display: inline-flex;
   align-items: center;
   gap: var(--space-sm);
-  font-family: var(--font-base);
   font-size: var(--text-md);
   font-weight: 500;
   color: var(--color-text-disabled);
@@ -27,7 +26,6 @@
 
 /* Empty state */
 .resultados__empty {
-  font-family: var(--font-base);
   font-size: var(--text-lg);
   color: var(--color-text-muted);
   text-align: center;
