@@ -76,7 +76,7 @@
   min-height: 122px;
   flex-shrink: 0;
   flex-grow: 1;
-  background: rgba(22, 22, 22, 0.55);
+  background: rgba(22, 22, 22, 0.45);
   backdrop-filter: blur(32px);
   border-radius: 0 0 20px 20px;
   padding: 12px;
@@ -85,7 +85,7 @@
   justify-content: space-between;
   box-sizing: border-box;
   margin-top: -18px;
-  border-top: 1px solid rgba(255, 255, 255, 0.2);
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .card-movie__title {

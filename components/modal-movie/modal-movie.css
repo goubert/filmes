@@ -202,7 +202,7 @@
         flex-direction: column;
         gap: 12px;
     }
-        .sinopse-movie h4, .elenco-movie h4, .equipe-movie h4{
+        .sinopse-movie h4, .elenco-movie h4, .equipe-movie h4, .streamings-list h4{
             font-size: 16px;
             font-weight: 500;
         }
