@@ -47,7 +47,6 @@ type Movie = {
   poster_path: string;
   backdrop_path: string;
   release_date: string;
-  vote_average: number;
   runtime: number;
   genres: Genre[];
   credits: {
@@ -58,6 +57,7 @@ type Movie = {
     results: ReleaseCountry[];
   };
   streaming: StreamingProvider[];
+  vote_average: number;
 };
 
 
@@ -102,6 +102,7 @@ export function MovieModal({ movieId, onClose }: Props) {
   function formatDate(date: string) {
     return new Date(date).toLocaleDateString("pt-BR");
   }
+  
 
   function getCertification() {
     const br =
@@ -117,6 +118,7 @@ export function MovieModal({ movieId, onClose }: Props) {
       "Livre"
     );
   }
+  
 
   function getCrew(job: string) {
     return movie?.credits?.crew
@@ -136,6 +138,7 @@ export function MovieModal({ movieId, onClose }: Props) {
 
   if (!movie) return null;
 
+  const percent = Math.round(movie.vote_average * 10);
   return (
     <div className="movie-modal-overlay" onClick={onClose}>
         <div
@@ -163,18 +166,23 @@ export function MovieModal({ movieId, onClose }: Props) {
                         alt={movie.title}
                     />
                     <div className="text-info-movie">
-                        
-                        <h2>{movie.title}</h2>
-                        <div className="more-info-text">
-                            <div className="classificacao-movie">{getCertification()}</div>
-                            <div className="release-movie">{formatDate(movie.release_date)}</div>
-                            <div className="movie-time">{formatRuntime(movie.runtime)}</div>
+                      <div className="rating-container">
+                        <div className="card-movie__badge modal" style={{ ["--percent" as any]: `${percent}%` }}>
+                          <span>{percent}</span>
                         </div>
-                        <div className="generos-movie">
-                            {movie.genres.map((genre) => (
-                                <span key={genre.id}>{genre.name}</span>
-                            ))}
-                        </div>
+                        <span>Avaliação<br/>TMDB</span>
+                      </div>
+                      <h2>{movie.title}</h2>
+                      <div className="more-info-text">
+                          <div className="classificacao-movie">{getCertification()}</div>
+                          <div className="release-movie">{formatDate(movie.release_date)}</div>
+                          <div className="movie-time">{formatRuntime(movie.runtime)}</div>
+                      </div>
+                      <div className="generos-movie">
+                          {movie.genres.map((genre) => (
+                              <span key={genre.id}>{genre.name}</span>
+                          ))}
+                      </div>
                     </div>
                 
                 </div>
