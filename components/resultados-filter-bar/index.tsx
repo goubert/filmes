@@ -197,19 +197,20 @@ export function ResultadosFilterBar({
         <div className="rfb-scroll">
           <div className="rfb">
             <FilterCard label="MOODS" className="rfb__card--moods" active={open === "moods"} onClick={openMoodsPopup}>
-              <div className="rfb__mood-icons">
-                {visibleMoods.map(key => (
-                  MOOD_IMAGES[key] && (
-                    <img key={key} src={MOOD_IMAGES[key]} alt={key} className="rfb__mood-icon" />
-                  )
-                ))}
-                {extraMoods > 0 && (
-                  <span className="rfb__mood-extra">+{extraMoods}</span>
-                )}
-                {activeMoods.length === 0 && (
-                  <span className="rfb__card-value">Todos</span>
-                )}
-              </div>
+              {activeMoods.length === 0 ? (
+                <span className="rfb__card-value">Todos</span>
+              ) : (
+                <div className="rfb__mood-icons">
+                  {visibleMoods.map(key => (
+                    MOOD_IMAGES[key] && (
+                      <img key={key} src={MOOD_IMAGES[key]} alt={key} className="rfb__mood-icon" />
+                    )
+                  ))}
+                  {extraMoods > 0 && (
+                    <span className="rfb__mood-extra">+{extraMoods}</span>
+                  )}
+                </div>
+              )}
             </FilterCard>
 
             <FilterCard
@@ -231,20 +232,21 @@ export function ResultadosFilterBar({
             </FilterCard>
 
             <FilterCard label="SERVIÇOS" className="rfb__card--services" active={open === "services"} onClick={openServicesPopup}>
-              <div className="rfb__provider-icons">
-                {selectedProviders.slice(0, 3).map(id => {
-                  const p = popularProviders.find(p => p.provider_id === id);
-                  return p ? (
-                    <img key={id} src={`${TMDB_IMG}${p.logo_path}`} alt={p.provider_name} className="rfb__provider-icon" />
-                  ) : null;
-                })}
-                {selectedProviders.length > 3 && (
-                  <span className="rfb__mood-extra">+{selectedProviders.length - 3}</span>
-                )}
-                {selectedProviders.length === 0 && (
-                  <span className="rfb__card-value">Todos</span>
-                )}
-              </div>
+              {selectedProviders.length === 0 ? (
+                <span className="rfb__card-value">Todos</span>
+              ) : (
+                <div className="rfb__provider-icons">
+                  {selectedProviders.slice(0, 3).map(id => {
+                    const p = popularProviders.find(p => p.provider_id === id);
+                    return p ? (
+                      <img key={id} src={`${TMDB_IMG}${p.logo_path}`} alt={p.provider_name} className="rfb__provider-icon" />
+                    ) : null;
+                  })}
+                  {selectedProviders.length > 3 && (
+                    <span className="rfb__mood-extra">+{selectedProviders.length - 3}</span>
+                  )}
+                </div>
+              )}
             </FilterCard>
           </div>
         </div>

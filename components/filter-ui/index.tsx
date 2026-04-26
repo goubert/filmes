@@ -21,7 +21,7 @@ export const FilterCard = forwardRef<HTMLButtonElement, FilterCardProps>(
       >
         <div className="filter-card__header">
           <span className="filter-card__label">{label}</span>
-          <ChevronUp />
+          <ChevronUp active={active} />
         </div>
         {children}
       </button>
@@ -47,11 +47,11 @@ export function FilterPopup({ onClose, children }: FilterPopupProps) {
 
 // ─── Internal ─────────────────────────────────────────
 
-function ChevronUp() {
+function ChevronUp({ active }: { active?: boolean }) {
   return (
     <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
       <path
-        d="M2 8L6 4L10 8"
+        d={active ? "M2 4L6 8L10 4" : "M2 8L6 4L10 8"}
         stroke="#686868"
         strokeWidth="1.5"
         strokeLinecap="round"
