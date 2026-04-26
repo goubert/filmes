@@ -6,16 +6,21 @@
   flex-direction: column;
   justify-content: space-between;
   align-items: center;
-  padding: 8px 10px;
+  padding: 10px;
   gap: 8px;
   width: 96px;
-  height: 55px;
+  height: 68px;
+  overflow: hidden;
   background: rgba(37, 37, 37, 0.8);
   border: 1px solid rgba(255, 255, 255, 0.1);
   backdrop-filter: blur(7px);
   border-radius: 12px;
   cursor: pointer;
   flex-shrink: 0;
+}
+
+.filter-card--active {
+  border-color: var(--color-accent, #D0DD5F);
 }
 
 .filter-card__header {
@@ -48,7 +53,7 @@
 .filter-popup {
   position: fixed;
   z-index: 101;
-  bottom: 79px;
+  bottom: 94px;
   left: calc(50% - min(380px, 90vw) / 2);
   width: min(380px, 90vw);
   max-height: 320px;
