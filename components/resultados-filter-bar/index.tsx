@@ -104,6 +104,8 @@ export function ResultadosFilterBar({
   const [open, setOpen] = useState<"year" | "duration" | "moods" | "services" | null>(null);
   const [pendingEmotions, setPendingEmotions] = useState<Emotions | null>(null);
   const [pendingProviders, setPendingProviders] = useState<number[] | null>(null);
+  const [pendingYear, setPendingYear] = useState<{ start: number; end: number } | null>(null);
+  const [pendingDuration, setPendingDuration] = useState<string | null | undefined>(undefined);
 
   const popularProviders = streamingProviders.filter(p => POPULAR_IDS.includes(p.provider_id))
     .sort((a, b) => POPULAR_IDS.indexOf(a.provider_id) - POPULAR_IDS.indexOf(b.provider_id));
@@ -142,9 +144,35 @@ export function ResultadosFilterBar({
     router.push(`/resultados?${p.toString()}`);
   }
 
+  function resolvedYear()      { return pendingYear ?? currentYear; }
+  function resolvedDuration()  { return pendingDuration !== undefined ? pendingDuration : duration; }
+  function resolvedProviders() { return pendingProviders ?? selectedProviders; }
+  function resolvedEmotions()  { return pendingEmotions ?? emotions; }
+
+  function commitAndClose() {
+    navigate(resolvedYear(), resolvedDuration(), resolvedProviders(), resolvedEmotions());
+    setPendingYear(null);
+    setPendingDuration(undefined);
+    setPendingProviders(null);
+    setPendingEmotions(null);
+    setOpen(null);
+  }
+
+  function openYearPopup() {
+    if (open === "year") return;
+    if (!pendingYear) setPendingYear({ ...currentYear });
+    setOpen("year");
+  }
+
+  function openDurationPopup() {
+    if (open === "duration") return;
+    if (pendingDuration === undefined) setPendingDuration(duration);
+    setOpen("duration");
+  }
+
   function openMoodsPopup() {
     if (open === "moods") return;
-    setPendingEmotions({ ...emotions });
+    if (!pendingEmotions) setPendingEmotions({ ...emotions });
     setOpen("moods");
   }
 
@@ -155,17 +183,9 @@ export function ResultadosFilterBar({
     });
   }
 
-  function closeMoodsPopup() {
-    if (pendingEmotions) {
-      navigate(currentYear, duration, selectedProviders, pendingEmotions);
-    }
-    setPendingEmotions(null);
-    setOpen(null);
-  }
-
   function openServicesPopup() {
     if (open === "services") return;
-    setPendingProviders([...selectedProviders]);
+    if (!pendingProviders) setPendingProviders([...selectedProviders]);
     setOpen("services");
   }
 
@@ -174,14 +194,6 @@ export function ResultadosFilterBar({
       if (!prev) return prev;
       return prev.includes(id) ? prev.filter(p => p !== id) : [...prev, id];
     });
-  }
-
-  function closeServicesPopup() {
-    if (pendingProviders !== null) {
-      navigate(currentYear, duration, pendingProviders);
-    }
-    setPendingProviders(null);
-    setOpen(null);
   }
 
   return (
@@ -217,7 +229,7 @@ export function ResultadosFilterBar({
               label="PERÍODO"
               className="rfb__card--period"
               active={open === "year"}
-              onClick={() => setOpen(prev => prev === "year" ? null : "year")}
+              onClick={openYearPopup}
             >
               <span className="rfb__card-value">{getYearLabel(yearStart, yearEnd)}</span>
             </FilterCard>
@@ -226,7 +238,7 @@ export function ResultadosFilterBar({
               label="DURAÇÃO"
               className="rfb__card--duration"
               active={open === "duration"}
-              onClick={() => setOpen(prev => prev === "duration" ? null : "duration")}
+              onClick={openDurationPopup}
             >
               <span className="rfb__card-value">{getDurationLabel(duration)}</span>
             </FilterCard>
@@ -252,8 +264,8 @@ export function ResultadosFilterBar({
         </div>
       </div>
 
-      {open === "year" && (
-        <FilterPopup onClose={() => setOpen(null)}>
+      {open === "year" && pendingYear && (
+        <FilterPopup onClose={commitAndClose}>
           <span className="rfb__period-title">FILTRAR FILMES NO PERÍODO:</span>
           <div className="rfb__period-list">
             {YEAR_PRESETS.map(p => (
@@ -262,8 +274,8 @@ export function ResultadosFilterBar({
                   type="radio"
                   name="year-preset"
                   className="rfb__period-radio"
-                  checked={p.start === yearStart && p.end === yearEnd}
-                  onChange={() => navigate({ start: p.start, end: p.end }, duration, selectedProviders)}
+                  checked={p.start === pendingYear.start && p.end === pendingYear.end}
+                  onChange={() => setPendingYear({ start: p.start, end: p.end })}
                 />
                 <span className="rfb__period-row-label">{p.label}</span>
               </label>
@@ -272,8 +284,8 @@ export function ResultadosFilterBar({
         </FilterPopup>
       )}
 
-      {open === "duration" && (
-        <FilterPopup onClose={() => setOpen(null)}>
+      {open === "duration" && pendingDuration !== undefined && (
+        <FilterPopup onClose={commitAndClose}>
           <span className="rfb__period-title">FILTRAR FILMES DURAÇÃO</span>
           <div className="rfb__period-list">
             {DURATION_OPTIONS.map(opt => (
@@ -282,8 +294,8 @@ export function ResultadosFilterBar({
                   type="radio"
                   name="duration-preset"
                   className="rfb__period-radio"
-                  checked={opt.value === duration}
-                  onChange={() => navigate(currentYear, opt.value, selectedProviders)}
+                  checked={opt.value === pendingDuration}
+                  onChange={() => setPendingDuration(opt.value)}
                 />
                 <span className="rfb__period-row-label">{opt.popupLabel}</span>
               </label>
@@ -293,7 +305,7 @@ export function ResultadosFilterBar({
       )}
 
       {open === "services" && pendingProviders !== null && (
-        <FilterPopup onClose={closeServicesPopup}>
+        <FilterPopup onClose={commitAndClose}>
           <span className="rfb__moods-title">STREAMINGS SELECIONADOS</span>
           <div className="rfb__services-grid">
             {popularProviders.map(p => {
@@ -318,7 +330,7 @@ export function ResultadosFilterBar({
       )}
 
       {open === "moods" && pendingEmotions && (
-        <FilterPopup onClose={closeMoodsPopup}>
+        <FilterPopup onClose={commitAndClose}>
           {MOOD_KEYS.some(k => pendingEmotions[k as keyof Emotions] > 0) && (
             <span className="rfb__moods-title">MOODS SELECIONADOS</span>
           )}
