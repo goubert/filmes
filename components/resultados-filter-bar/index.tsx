@@ -86,6 +86,7 @@ type Props = {
   duration: string | null;
   selectedProviders: number[];
   streamingProviders: Provider[];
+  selectedCountries: string[];
 };
 
 function getYearLabel(start: number, end: number) {
@@ -97,7 +98,7 @@ function getDurationLabel(duration: string | null) {
 }
 
 export function ResultadosFilterBar({
-  emotions, yearStart, yearEnd, duration, selectedProviders, streamingProviders,
+  emotions, yearStart, yearEnd, duration, selectedProviders, streamingProviders, selectedCountries,
 }: Props) {
   const router = useRouter();
   const [open, setOpen] = useState<"year" | "duration" | "moods" | "services" | null>(null);
@@ -116,7 +117,7 @@ export function ResultadosFilterBar({
 
   const currentYear = { start: yearStart, end: yearEnd };
 
-  function navigate(year: { start: number; end: number }, dur: string | null, providers: number[], emo: Emotions = emotions) {
+  function navigate(year: { start: number; end: number }, dur: string | null, providers: number[], emo: Emotions = emotions, countries: string[] = selectedCountries) {
     const p = new URLSearchParams({
       laugh:         String(emo.laugh),
       cry:           String(emo.cry),
@@ -136,6 +137,7 @@ export function ResultadosFilterBar({
     });
     if (dur) p.set("duration", dur);
     if (providers.length) p.set("providers", providers.join(","));
+    if (countries.length) p.set("countries", countries.join(","));
     setOpen(null);
     router.push(`/resultados?${p.toString()}`);
   }
