@@ -19,6 +19,24 @@ const DURATION_OPTIONS = [
   { label: "Qualquer",      value: null     },
 ];
 
+const MOOD_LABELS: Record<string, string> = {
+  laugh:         "É engraçado",
+  action:        "Ação",
+  cry:           "Faz chorar",
+  romance:       "Romance",
+  scary:         "Terror",
+  adventure:     "Aventura",
+  family:        "Família",
+  animation:     "Animação",
+  feelgood:      "Feel Good",
+  nostalgic:     "Nostalgia",
+  psychological: "Psicológico",
+  tense:         "Tensão",
+  melancholic:   "Melancólico",
+};
+
+const MOOD_KEYS = Object.keys(MOOD_LABELS);
+
 const MOOD_IMAGES: Record<string, string> = {
   laugh:         "/emoji-laugh.png",
   action:        "/emoji-action.png",
@@ -77,11 +95,13 @@ export function ResultadosFilterBar({
   emotions, yearStart, yearEnd, duration, selectedProviders,
 }: Props) {
   const router = useRouter();
-  const [open, setOpen] = useState<"year" | "duration" | null>(null);
+  const [open, setOpen] = useState<"year" | "duration" | "moods" | null>(null);
   const [popupPos, setPopupPos] = useState<{ bottom: number; left: number }>({ bottom: 0, left: 0 });
+  const [pendingEmotions, setPendingEmotions] = useState<Emotions | null>(null);
 
   const yearRef     = useRef<HTMLButtonElement>(null);
   const durationRef = useRef<HTMLButtonElement>(null);
+  const moodsRef    = useRef<HTMLButtonElement>(null);
 
   const activeMoods = Object.entries(emotions)
     .filter(([, v]) => v > 0)
@@ -106,21 +126,21 @@ export function ResultadosFilterBar({
     setOpen(prev => prev === type ? null : type);
   }
 
-  function navigate(year: { start: number; end: number }, dur: string | null, providers: number[]) {
+  function navigate(year: { start: number; end: number }, dur: string | null, providers: number[], emo: Emotions = emotions) {
     const p = new URLSearchParams({
-      laugh:         String(emotions.laugh),
-      cry:           String(emotions.cry),
-      tense:         String(emotions.tense),
-      scary:         String(emotions.scary),
-      romance:       String(emotions.romance),
-      action:        String(emotions.action),
-      adventure:     String(emotions.adventure),
-      animation:     String(emotions.animation),
-      family:        String(emotions.family),
-      feelgood:      String(emotions.feelgood),
-      melancholic:   String(emotions.melancholic),
-      nostalgic:     String(emotions.nostalgic),
-      psychological: String(emotions.psychological),
+      laugh:         String(emo.laugh),
+      cry:           String(emo.cry),
+      tense:         String(emo.tense),
+      scary:         String(emo.scary),
+      romance:       String(emo.romance),
+      action:        String(emo.action),
+      adventure:     String(emo.adventure),
+      animation:     String(emo.animation),
+      family:        String(emo.family),
+      feelgood:      String(emo.feelgood),
+      melancholic:   String(emo.melancholic),
+      nostalgic:     String(emo.nostalgic),
+      psychological: String(emo.psychological),
       yearStart:     String(year.start),
       yearEnd:       String(year.end),
     });
@@ -130,11 +150,32 @@ export function ResultadosFilterBar({
     router.push(`/resultados?${p.toString()}`);
   }
 
+  function openMoodsPopup() {
+    if (open === "moods") return;
+    setPendingEmotions({ ...emotions });
+    setOpen("moods");
+  }
+
+  function toggleMood(key: string) {
+    setPendingEmotions(prev => {
+      if (!prev) return prev;
+      return { ...prev, [key]: prev[key as keyof Emotions] > 0 ? 0 : 2 };
+    });
+  }
+
+  function closeMoodsPopup() {
+    if (pendingEmotions) {
+      navigate(currentYear, duration, selectedProviders, pendingEmotions);
+    }
+    setPendingEmotions(null);
+    setOpen(null);
+  }
+
   const currentYear = { start: yearStart, end: yearEnd };
 
   return (
     <>
-      {open && <div className="rfb__overlay" onClick={() => setOpen(null)} />}
+      {open && <div className="rfb__overlay" onClick={() => open === "moods" ? closeMoodsPopup() : setOpen(null)} />}
 
       <div className="rfb-bar">
         <button className="rfb__back" onClick={() => router.push("/")}>
@@ -147,7 +188,7 @@ export function ResultadosFilterBar({
         <div className="rfb-scroll">
           <div className="rfb">
             {/* MOODS */}
-            <button className="rfb__card">
+            <button ref={moodsRef} className="rfb__card" onClick={openMoodsPopup}>
               <div className="rfb__card-header">
                 <span className="rfb__card-label">MOODS</span>
                 <ChevronUp />
@@ -229,6 +270,30 @@ export function ResultadosFilterBar({
               {opt.label}
             </button>
           ))}
+        </div>
+      )}
+
+      {open === "moods" && pendingEmotions && (
+        <div className="rfb__popup rfb__popup--moods">
+          {MOOD_KEYS.some(k => pendingEmotions[k as keyof Emotions] > 0) && (
+            <span className="rfb__moods-title">MOODS SELECIONADOS</span>
+          )}
+          <div className="rfb__moods-list">
+            {MOOD_KEYS.map(key => {
+              const active = pendingEmotions[key as keyof Emotions] > 0;
+              return (
+                <label key={key} className="rfb__mood-row">
+                  <input
+                    type="checkbox"
+                    checked={active}
+                    onChange={() => toggleMood(key)}
+                    className="rfb__mood-checkbox"
+                  />
+                  <span className="rfb__mood-row-label">{MOOD_LABELS[key]}</span>
+                </label>
+              );
+            })}
+          </div>
         </div>
       )}
     </>
