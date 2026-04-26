@@ -7,15 +7,16 @@ type FilterCardProps = {
   label: string;
   onClick?: () => void;
   className?: string;
+  active?: boolean;
   children: React.ReactNode;
 };
 
 export const FilterCard = forwardRef<HTMLButtonElement, FilterCardProps>(
-  function FilterCard({ label, onClick, className, children }, ref) {
+  function FilterCard({ label, onClick, className, active, children }, ref) {
     return (
       <button
         ref={ref}
-        className={["filter-card", className].filter(Boolean).join(" ")}
+        className={["filter-card", active && "filter-card--active", className].filter(Boolean).join(" ")}
         onClick={onClick}
       >
         <div className="filter-card__header">

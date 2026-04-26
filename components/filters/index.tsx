@@ -11,7 +11,7 @@ const DURATION_PILLS = [
   { label: "1h 30m até 2h", value: "medium" },
   { label: "2h +", value: "long" },
 ]
-const POPULAR_IDS = [8, 119, 337, 1899, 307, 531, 350, 283, 11, 227, 188, 167]
+const POPULAR_IDS = [8, 119, 337, 1899, 307, 531, 350, 283, 11, 227, 188, 167, 2302]
 
 type Provider = { provider_id: number; provider_name: string; logo_path: string }
 
