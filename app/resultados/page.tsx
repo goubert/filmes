@@ -23,6 +23,7 @@ type SearchParams = {
   yearEnd?: string;
   duration?: string;
   providers?: string;
+  countries?: string;
 };
 
 
@@ -61,9 +62,13 @@ export default async function ResultadosPage({
     ? searchParams.providers.split(",").map(Number).filter(Boolean)
     : [];
 
+  const countries = searchParams.countries
+    ? searchParams.countries.split(",").filter(Boolean)
+    : [];
+
   const [[movies], streamingProviders] = await Promise.all([
     Promise.all([
-      discoverMoviesByEmotions(emotions, yearRange, [], duration, providerIds, 1),
+      discoverMoviesByEmotions(emotions, yearRange, countries, duration, providerIds, 1),
       new Promise((r) => setTimeout(r, 1000)),
     ]),
     getStreamingProvidersBR(),
@@ -88,6 +93,7 @@ export default async function ResultadosPage({
       duration={duration}
       selectedProviders={providerIds}
       streamingProviders={streamingProviders}
+      selectedCountries={countries}
     />
     </>
   );
