@@ -1,8 +1,9 @@
 "use client";
 
-import { useState, useRef } from "react";
+import { useState } from "react";
 import { useRouter } from "next/navigation";
 import "./resultados-filter-bar.css";
+import { FilterCard, FilterPopup } from "../filter-ui";
 
 const YEAR_PRESETS = [
   { label: "Últimos 5 anos",       start: 2021, end: 2026 },
@@ -96,12 +97,7 @@ export function ResultadosFilterBar({
 }: Props) {
   const router = useRouter();
   const [open, setOpen] = useState<"year" | "duration" | "moods" | null>(null);
-  const [popupPos, setPopupPos] = useState<{ bottom: number; left: number }>({ bottom: 0, left: 0 });
   const [pendingEmotions, setPendingEmotions] = useState<Emotions | null>(null);
-
-  const yearRef     = useRef<HTMLButtonElement>(null);
-  const durationRef = useRef<HTMLButtonElement>(null);
-  const moodsRef    = useRef<HTMLButtonElement>(null);
 
   const activeMoods = Object.entries(emotions)
     .filter(([, v]) => v > 0)
@@ -110,21 +106,7 @@ export function ResultadosFilterBar({
   const visibleMoods = activeMoods.slice(0, 3);
   const extraMoods   = activeMoods.length - visibleMoods.length;
 
-  function openPopup(type: "year" | "duration", ref: React.RefObject<HTMLButtonElement>) {
-    if (ref.current) {
-      const rect = ref.current.getBoundingClientRect();
-      const popupWidth = 177;
-      const margin = 12;
-      const vw = window.innerWidth;
-
-      let left = rect.left;
-      if (left + popupWidth > vw - margin) left = rect.right - popupWidth;
-      left = Math.max(margin, Math.min(left, vw - popupWidth - margin));
-
-      setPopupPos({ bottom: window.innerHeight - rect.top + 8, left });
-    }
-    setOpen(prev => prev === type ? null : type);
-  }
+  const currentYear = { start: yearStart, end: yearEnd };
 
   function navigate(year: { start: number; end: number }, dur: string | null, providers: number[], emo: Emotions = emotions) {
     const p = new URLSearchParams({
@@ -171,12 +153,8 @@ export function ResultadosFilterBar({
     setOpen(null);
   }
 
-  const currentYear = { start: yearStart, end: yearEnd };
-
   return (
     <>
-      {open && <div className="rfb__overlay" onClick={() => open === "moods" ? closeMoodsPopup() : setOpen(null)} />}
-
       <div className="rfb-bar">
         <button className="rfb__back" onClick={() => router.push("/")}>
           <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
@@ -187,21 +165,11 @@ export function ResultadosFilterBar({
 
         <div className="rfb-scroll">
           <div className="rfb">
-            {/* MOODS */}
-            <button ref={moodsRef} className="rfb__card" onClick={openMoodsPopup}>
-              <div className="rfb__card-header">
-                <span className="rfb__card-label">MOODS</span>
-                <ChevronUp />
-              </div>
+            <FilterCard label="MOODS" onClick={openMoodsPopup}>
               <div className="rfb__mood-icons">
                 {visibleMoods.map(key => (
                   MOOD_IMAGES[key] && (
-                    <img
-                      key={key}
-                      src={MOOD_IMAGES[key]}
-                      alt={key}
-                      className="rfb__mood-icon"
-                    />
+                    <img key={key} src={MOOD_IMAGES[key]} alt={key} className="rfb__mood-icon" />
                   )
                 ))}
                 {extraMoods > 0 && (
@@ -211,42 +179,37 @@ export function ResultadosFilterBar({
                   <span className="rfb__card-value">Todos</span>
                 )}
               </div>
-            </button>
+            </FilterCard>
 
-            {/* PERÍODO */}
-            <button ref={yearRef} className="rfb__card rfb__card--period" onClick={() => openPopup("year", yearRef)}>
-              <div className="rfb__card-header">
-                <span className="rfb__card-label">PERÍODO</span>
-                <ChevronUp />
-              </div>
+            <FilterCard
+              label="PERÍODO"
+              className="rfb__card--period"
+              onClick={() => setOpen(prev => prev === "year" ? null : "year")}
+            >
               <span className="rfb__card-value">{getYearLabel(yearStart, yearEnd)}</span>
-            </button>
+            </FilterCard>
 
-            {/* DURAÇÃO */}
-            <button ref={durationRef} className="rfb__card rfb__card--duration" onClick={() => openPopup("duration", durationRef)}>
-              <div className="rfb__card-header">
-                <span className="rfb__card-label">DURAÇÃO</span>
-                <ChevronUp />
-              </div>
+            <FilterCard
+              label="DURAÇÃO"
+              className="rfb__card--duration"
+              onClick={() => setOpen(prev => prev === "duration" ? null : "duration")}
+            >
               <span className="rfb__card-value">{getDurationLabel(duration)}</span>
-            </button>
+            </FilterCard>
 
-            {/* SERVIÇOS */}
-            <button className="rfb__card">
-              <div className="rfb__card-header">
-                <span className="rfb__card-label">SERVIÇOS</span>
-                <ChevronUp />
-              </div>
+            <FilterCard label="SERVIÇOS">
               <span className="rfb__card-value">
-                {selectedProviders.length > 0 ? `${selectedProviders.length} ativo${selectedProviders.length > 1 ? "s" : ""}` : "Todos"}
+                {selectedProviders.length > 0
+                  ? `${selectedProviders.length} ativo${selectedProviders.length > 1 ? "s" : ""}`
+                  : "Todos"}
               </span>
-            </button>
+            </FilterCard>
           </div>
         </div>
       </div>
 
       {open === "year" && (
-        <div className="rfb__popup" style={{ bottom: popupPos.bottom, left: popupPos.left }}>
+        <FilterPopup onClose={() => setOpen(null)}>
           {YEAR_PRESETS.map(p => (
             <button
               key={p.label}
@@ -256,11 +219,11 @@ export function ResultadosFilterBar({
               {p.label}
             </button>
           ))}
-        </div>
+        </FilterPopup>
       )}
 
       {open === "duration" && (
-        <div className="rfb__popup" style={{ bottom: popupPos.bottom, left: popupPos.left }}>
+        <FilterPopup onClose={() => setOpen(null)}>
           {DURATION_OPTIONS.map(opt => (
             <button
               key={String(opt.value)}
@@ -270,11 +233,11 @@ export function ResultadosFilterBar({
               {opt.label}
             </button>
           ))}
-        </div>
+        </FilterPopup>
       )}
 
       {open === "moods" && pendingEmotions && (
-        <div className="rfb__popup rfb__popup--moods">
+        <FilterPopup onClose={closeMoodsPopup}>
           {MOOD_KEYS.some(k => pendingEmotions[k as keyof Emotions] > 0) && (
             <span className="rfb__moods-title">MOODS SELECIONADOS</span>
           )}
@@ -294,16 +257,8 @@ export function ResultadosFilterBar({
               );
             })}
           </div>
-        </div>
+        </FilterPopup>
       )}
     </>
-  );
-}
-
-function ChevronUp() {
-  return (
-    <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
-      <path d="M2 8L6 4L10 8" stroke="#686868" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-    </svg>
   );
 }
