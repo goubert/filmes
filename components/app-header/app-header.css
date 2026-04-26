@@ -1,0 +1,42 @@
+/* ─── Component: AppHeader ────────────────────────────── */
+
+.app-header {
+  background: transparent;
+  padding: var(--space-lg) var(--space-md) var(--space-md);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-lg);
+}
+
+.app-header--start {
+  align-items: flex-start;
+}
+
+.app-header--center {
+  align-items: center;
+}
+
+.app-header img {
+  width: 200px;
+}
+
+.app-header h1 {
+  font-weight: 300;
+  font-size: var(--text-xl);
+  line-height: 100%;
+  color: var(--color-accent-muted);
+  max-width: 380px;
+}
+
+@media (min-width: 1024px) {
+  .app-header--start {
+    align-items: center;
+    padding: 0;
+  }
+
+  .app-header h1 {
+    font-size: 38px;
+    text-align: center;
+    max-width: 460px;
+  }
+}

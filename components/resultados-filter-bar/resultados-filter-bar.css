@@ -1,10 +1,44 @@
 /* ─── Component: ResultadosFilterBar ─────────────────── */
 
-/* Scroll wrapper — só a barra de filtros rola horizontalmente */
+/* Fixed bottom bar */
+.rfb-bar {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  padding: 16px 0;
+  gap: 8px;
+  z-index: 50;
+  background: linear-gradient(180deg, rgba(11, 11, 11, 0) 0%, rgba(11, 11, 11, 0.8) 35%, #0B0B0B 100%);
+}
+
+/* Back button */
+.rfb__back {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 8px 16px;
+  gap: 10px;
+  width: 60px;
+  height: 68px;
+  background: #D0DD5F;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  box-shadow: 0px 0px 24px rgba(0, 0, 0, 0.55);
+  backdrop-filter: blur(7px);
+  border-radius: 0px 12px 12px 0px;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+/* Scroll wrapper */
 .rfb-scroll {
   overflow-x: auto;
   overflow-y: visible;
   scrollbar-width: none;
+  flex: 1;
 }
 
 .rfb-scroll::-webkit-scrollbar {
@@ -15,200 +49,275 @@
   display: flex;
   flex-direction: row;
   align-items: center;
-  padding: 0 16px;
   gap: 8px;
-  height: 42px;
   width: max-content;
-  min-width: 100%;
 }
 
-/* Home button */
-.rfb__home {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 50px;
-  height: 42px;
-  background: #D0DD5F;
-  border: 1px solid rgba(255, 255, 255, 0.14);
-  backdrop-filter: blur(7px);
-  border-radius: 50px;
-  cursor: pointer;
-  flex-shrink: 0;
-}
+/* FilterCard size modifiers */
+.rfb__card--moods     { width: 110px; }
+.rfb__card--period    { width: 116px; }
+.rfb__card--duration  { width: 110px; }
+.rfb__card--services  { width: 110px; }
 
-/* Filter pill */
-.rfb__pill {
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  align-items: center;
-  padding: 7px 6px 7px 16px;
-  gap: 8px;
-  height: 42px;
-  background: rgba(37, 37, 37, 0.8);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  backdrop-filter: blur(7px);
-  border-radius: 50px;
-  cursor: pointer;
-  white-space: nowrap;
-}
-
-.rfb__pill-label {
-  font-family: var(--font-base);
+/* Card value text */
+.rfb__card-value {
   font-size: 12px;
   font-weight: 400;
-  line-height: 15px;
   letter-spacing: 0.02em;
-  color: #BCBCBC;
+  color: #bcbcbc;
+  text-align: left;
+  line-height: 110%;
+  width: 100%;
+  white-space: normal;
+  word-break: break-word;
 }
 
-.rfb__pill-icon {
+/* Mood icons row */
+.rfb__mood-icons {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  width: 100%;
+  height: 21px;
+}
+
+.rfb__mood-icon {
+  width: 21px;
+  height: 21px;
+  object-fit: contain;
+  flex-shrink: 0;
+  border-radius: 6px;
+}
+
+.rfb__mood-extra {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 28px;
-  height: 28px;
-  background: rgba(155, 155, 155, 0.09);
-  border-radius: 60px;
+  width: 21px;
+  height: 21px;
+  border-radius: 6px;
+  background: #515050;
+  border: 1px solid #545454;
+  font-size: 10px;
+  font-weight: 400;
+  letter-spacing: 0.02em;
+  color: #ffffff;
   flex-shrink: 0;
 }
 
-/* Overlay fullscreen */
-.rfb__overlay {
-  position: fixed;
-  inset: 0;
-  z-index: 100;
-}
-
-/* Popup panel — fixed ao viewport, posição calculada via JS */
-.rfb__popup {
-  position: fixed;
-  z-index: 101;
+/* Provider icons in card */
+.rfb__provider-icons {
   display: flex;
-  flex-direction: column;
-  background: var(--color-accent-muted);
-  border-radius: 16px;
-  overflow: hidden;
-  min-width: 180px;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  width: 100%;
+  height: 21px;
 }
 
-.rfb__option {
-  padding: 12px 16px;
-  font-family: var(--font-base);
-  font-size: 13px;
-  font-weight: 500;
-  color: var(--color-black);
-  background: none;
-  text-align: left;
-  cursor: pointer;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.08);
-  transition: background 150ms ease;
+.rfb__provider-icon {
+  width: 21px;
+  height: 21px;
+  object-fit: cover;
+  flex-shrink: 0;
+  border-radius: 6px;
 }
 
-.rfb__option:last-child {
-  border-bottom: none;
-}
+/* ─── Popup content: Serviços ────────────────────────── */
 
-.rfb__option:hover {
-  background: rgba(0, 0, 0, 0.08);
-}
-
-.rfb__option--active {
-  font-weight: 700;
-}
-
-/* Pill active state (streaming with selection) */
-.rfb__pill--active {
-  border-color: var(--color-accent-muted);
-}
-
-.rfb__pill--active .rfb__pill-label {
-  color: var(--color-accent-muted);
-}
-
-/* Streaming popup */
-.rfb__popup--streaming {
-  min-width: 220px;
-  padding: 12px;
-  gap: 12px;
-  display: flex;
-  flex-direction: column;
-  max-height: 60dvh;
-}
-
-.rfb__streaming-grid {
+.rfb__services-grid {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(6, 42px);
   gap: 8px;
-  overflow-y: auto;
-  flex: 1;
-  scrollbar-width: none;
+  justify-content: start;
+  width: 100%;
 }
 
-.rfb__streaming-grid::-webkit-scrollbar {
-  display: none;
-}
-
-.rfb__streaming-option {
+.rfb__service-item {
   display: flex;
   align-items: center;
   justify-content: center;
-  border-radius: 10px;
+  width: 42px;
+  height: 42px;
   padding: 4px;
+  background: none;
+  border: 2px solid rgba(250, 240, 236, 0.15);
+  border-radius: 10px;
   cursor: pointer;
-  border: 2px solid transparent;
-  transition: border-color 150ms ease, opacity 150ms ease;
-  opacity: 0.5;
+  flex-shrink: 0;
+  transition: border-color 150ms ease;
 }
 
-.rfb__streaming-option img {
-  width: 40px;
-  height: 40px;
-  border-radius: 8px;
+.rfb__service-item--active {
+  border-color: var(--color-accent, #D0DD5F);
+}
+
+.rfb__service-logo {
+  width: 34px;
+  height: 34px;
+  border-radius: 6px;
+  object-fit: cover;
   display: block;
 }
 
-.rfb__streaming-option--selected {
-  border-color: var(--color-black);
-  opacity: 1;
-}
+/* ─── Popup content: Year / Período ─────────────────── */
 
-.rfb__streaming-option:hover {
-  opacity: 1;
-}
-
-.rfb__streaming-more {
-  background: none;
-  border: none;
-  outline: none;
-  padding: 0;
-  font-family: var(--font-base);
-  font-size: 13px;
+.rfb__period-title {
+  font-size: 11px;
   font-weight: 500;
-  color: rgba(0, 0, 0, 0.7);
+  letter-spacing: 0.08em;
+  color: #686868;
+  text-transform: uppercase;
+}
+
+.rfb__period-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  width: 100%;
+}
+
+.rfb__period-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  cursor: pointer;
+}
+
+.rfb__period-row-label {
+  font-size: 16px;
+  font-weight: 400;
+  color: #bcbcbc;
+  transition: color 150ms ease;
+}
+
+.rfb__period-row:hover .rfb__period-row-label {
+  color: #ffffff;
+}
+
+/* Custom radio */
+.rfb__period-radio {
+  appearance: none;
+  -webkit-appearance: none;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  border: 2px solid #545454;
+  background: transparent;
+  flex-shrink: 0;
+  cursor: pointer;
+  position: relative;
+  transition: border-color 150ms ease;
+}
+
+.rfb__period-radio:checked {
+  border-color: #545454;
+}
+
+.rfb__period-radio:checked::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--color-accent, #D0DD5F);
+}
+
+/* ─── Popup content: Duration ────────────────────────── */
+
+.rfb__option {
+  width: 100%;
+  padding: 0;
+  font-size: 14px;
+  font-weight: 400;
+  color: #bcbcbc;
+  background: none;
   text-align: left;
   cursor: pointer;
-  text-align: right;
-  align-self: flex-end;
-  text-decoration: underline;
-  text-underline-offset: 3px;
+  border: none;
+  outline: none;
+  transition: color 150ms ease;
 }
 
-.rfb__streaming-apply {
-  width: 100%;
-  padding: 10px;
-  background: var(--color-black);
-  color: var(--color-accent-muted);
-  font-family: var(--font-base);
-  font-size: 13px;
+.rfb__option:hover {
+  color: #ffffff;
+}
+
+.rfb__option--active {
+  color: var(--color-accent);
   font-weight: 600;
-  border-radius: 50px;
-  cursor: pointer;
-  text-align: center;
-  transition: opacity 150ms ease;
 }
 
-.rfb__streaming-apply:hover {
-  opacity: 0.85;
+/* ─── Popup content: Moods ───────────────────────────── */
+
+.rfb__moods-title {
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  color: #686868;
+  text-transform: uppercase;
+}
+
+.rfb__moods-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  width: 100%;
+}
+
+.rfb__mood-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  cursor: pointer;
+}
+
+.rfb__mood-row-label {
+  font-size: 16px;
+  font-weight: 400;
+  color: #bcbcbc;
+  transition: color 150ms ease;
+}
+
+.rfb__mood-row:hover .rfb__mood-row-label {
+  color: #ffffff;
+}
+
+/* Custom checkbox */
+.rfb__mood-checkbox {
+  appearance: none;
+  -webkit-appearance: none;
+  width: 22px;
+  height: 22px;
+  border-radius: 6px;
+  border: 2px solid #545454;
+  background: transparent;
+  flex-shrink: 0;
+  cursor: pointer;
+  position: relative;
+  transition: background 150ms ease, border-color 150ms ease;
+}
+
+.rfb__mood-checkbox:checked {
+  background: var(--color-accent, #D0DD5F);
+  border-color: var(--color-accent, #D0DD5F);
+}
+
+.rfb__mood-checkbox:checked::after {
+  content: "";
+  position: absolute;
+  left: 5px;
+  top: 2px;
+  width: 6px;
+  height: 11px;
+  border: 2px solid #1a1a1a;
+  border-top: none;
+  border-left: none;
+  transform: rotate(45deg);
 }

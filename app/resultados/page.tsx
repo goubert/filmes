@@ -1,4 +1,5 @@
 import "./resultados.css";
+import "./resultados-layout.css";
 import { discoverMoviesByEmotions, getStreamingProvidersBR } from "@/lib/tmdb";
 import { ResultadosFilterBar } from "@/components/resultados-filter-bar";
 import { MovieList } from "./MovieList";
@@ -22,6 +23,7 @@ type SearchParams = {
   yearEnd?: string;
   duration?: string;
   providers?: string;
+  countries?: string;
 };
 
 
@@ -60,29 +62,39 @@ export default async function ResultadosPage({
     ? searchParams.providers.split(",").map(Number).filter(Boolean)
     : [];
 
+  const countries = searchParams.countries
+    ? searchParams.countries.split(",").filter(Boolean)
+    : [];
+
   const [[movies], streamingProviders] = await Promise.all([
     Promise.all([
-      discoverMoviesByEmotions(emotions, yearRange, [], duration, providerIds, 1),
+      discoverMoviesByEmotions(emotions, yearRange, countries, duration, providerIds, 1),
       new Promise((r) => setTimeout(r, 1000)),
     ]),
     getStreamingProvidersBR(),
   ]);
 
   return (
+    <>
+    <div className="resultados-found-wrapper">
+      <p className="resultados-found-label">Filmes encontrados:</p>
+    </div>
+    <div className="resultados-separator" />
     <main className="resultados">
-      <ResultadosFilterBar
-        emotions={emotions}
-        yearStart={yearRange.start}
-        yearEnd={yearRange.end}
-        duration={duration}
-        selectedProviders={providerIds}
-        streamingProviders={streamingProviders}
-      />
-
       <MovieList
         initialMovies={movies}
         searchParams={searchParams as Record<string, string>}
       />
     </main>
+    <ResultadosFilterBar
+      emotions={emotions}
+      yearStart={yearRange.start}
+      yearEnd={yearRange.end}
+      duration={duration}
+      selectedProviders={providerIds}
+      streamingProviders={streamingProviders}
+      selectedCountries={countries}
+    />
+    </>
   );
 }
