@@ -4,7 +4,7 @@ import "./page.css";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { AppHeader } from "../components/app-header";
-import { FiltersSection } from "../components/filters";
+import { FiltersSection, type Country, type Actor } from "../components/filters";
 import { MoodsSection } from "../components/moods-section";
 
 type EmotionKey =
@@ -48,6 +48,8 @@ export default function Home() {
 
   const [duration, setDuration] = useState<string | null>(null);
   const [selectedProviders, setSelectedProviders] = useState<number[]>([]);
+  const [selectedCountries, setSelectedCountries] = useState<Country[]>([]);
+  const [selectedActors, setSelectedActors] = useState<Actor[]>([]);
 
   function handleMoodChange(key: EmotionKey, value: boolean) {
     setEmotions((prev) => ({
@@ -70,6 +72,12 @@ export default function Home() {
 
     if (selectedProviders.length) {
       params.set("providers", selectedProviders.join(","));
+    }
+    if (selectedCountries.length) {
+      params.set("countries", selectedCountries.map(c => c.iso).join(","));
+    }
+    if (selectedActors.length) {
+      params.set("cast", selectedActors.map(a => a.id).join(","));
     }
 
     router.push(`/resultados?${params.toString()}`);
@@ -97,6 +105,10 @@ export default function Home() {
           onDurationChange={setDuration}
           selectedProviders={selectedProviders}
           onProvidersChange={setSelectedProviders}
+          selectedCountries={selectedCountries}
+          onCountriesChange={setSelectedCountries}
+          selectedActors={selectedActors}
+          onActorsChange={setSelectedActors}
         />
       </div>
 

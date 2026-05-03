@@ -8,6 +8,34 @@ const EMOTION_LEVELS = {
 
 import { EMOTIONS } from "./emotions";
 
+export async function getCountriesBR() {
+  const res = await fetch(
+    `${API_URL}/configuration/countries?api_key=${process.env.NEXT_PUBLIC_TMDB_KEY}&language=pt-BR`,
+    { next: { revalidate: 86400 } }
+  )
+  const data = await res.json()
+  return (data as any[]).map(c => ({
+    iso: c.iso_3166_1 as string,
+    name: (c.native_name || c.english_name) as string,
+  }))
+}
+
+export async function searchActors(query: string) {
+  if (!query) return []
+  const res = await fetch(
+    `${API_URL}/search/person?api_key=${process.env.NEXT_PUBLIC_TMDB_KEY}&language=pt-BR&query=${encodeURIComponent(query)}`,
+    { cache: "no-store" }
+  )
+  const data = await res.json()
+  return ((data.results ?? []) as any[])
+    .filter((p: any) => p.known_for_department === "Acting")
+    .map((p: any) => ({
+      id: p.id as number,
+      name: p.name as string,
+      profile_path: (p.profile_path ?? null) as string | null,
+    }))
+}
+
 export async function getStreamingProvidersBR() {
   const res = await fetch(
     `${API_URL}/watch/providers/movie?api_key=${process.env.NEXT_PUBLIC_TMDB_KEY}&language=pt-BR&watch_region=BR`,

@@ -34,15 +34,17 @@ export const FilterCard = forwardRef<HTMLButtonElement, FilterCardProps>(
 type FilterPopupProps = {
   onCancel: () => void;
   onConfirm: () => void;
+  searchSlot?: React.ReactNode;
   children: React.ReactNode;
 };
 
-export function FilterPopup({ onCancel, onConfirm, children }: FilterPopupProps) {
+export function FilterPopup({ onCancel, onConfirm, searchSlot, children }: FilterPopupProps) {
   return (
     <>
       <div className="filter-overlay" onClick={onCancel} />
       <div className="filter-popup">
         <div className="filter-popup__content">{children}</div>
+        {searchSlot && <div className="filter-popup__search">{searchSlot}</div>}
         <div className="filter-popup__actions">
           <button className="filter-popup__btn filter-popup__btn--cancel" onClick={onCancel}>
             Cancelar

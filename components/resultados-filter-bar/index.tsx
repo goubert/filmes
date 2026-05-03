@@ -3,6 +3,8 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { FilterCard, FilterPopup } from "../filter-ui";
+import { CountrySearchList, CountrySearchInput, Country, ALL_COUNTRIES, isoToFlag } from "../country-search";
+import { ActorSearchList, ActorSearchInput, Actor } from "../actor-search";
 import "./resultados-filter-bar.css";
 
 const THIS_YEAR = new Date().getFullYear();
@@ -87,6 +89,7 @@ type Props = {
   selectedProviders: number[];
   streamingProviders: Provider[];
   selectedCountries: string[];
+  selectedActors?: Actor[];
 };
 
 function getYearLabel(start: number, end: number) {
@@ -97,15 +100,21 @@ function getDurationLabel(duration: string | null) {
   return DURATION_OPTIONS.find(d => d.value === duration)?.cardLabel ?? "Qualquer";
 }
 
+function isosToCountries(isos: string[]): Country[] {
+  return isos.map(iso => ALL_COUNTRIES.find(c => c.iso === iso) ?? { iso, name: iso });
+}
+
 export function ResultadosFilterBar({
-  emotions, yearStart, yearEnd, duration, selectedProviders, streamingProviders, selectedCountries,
+  emotions, yearStart, yearEnd, duration, selectedProviders, streamingProviders, selectedCountries, selectedActors = [],
 }: Props) {
   const router = useRouter();
-  const [open, setOpen] = useState<"year" | "duration" | "moods" | "services" | null>(null);
+  const [open, setOpen] = useState<"year" | "duration" | "moods" | "services" | "countries" | "cast" | null>(null);
   const [pendingEmotions, setPendingEmotions] = useState<Emotions | null>(null);
   const [pendingProviders, setPendingProviders] = useState<number[] | null>(null);
   const [pendingYear, setPendingYear] = useState<{ start: number; end: number } | null>(null);
   const [pendingDuration, setPendingDuration] = useState<string | null | undefined>(undefined);
+  const [pendingCountries, setPendingCountries] = useState<Country[] | null>(null);
+  const [pendingActors, setPendingActors] = useState<Actor[] | null>(null);
 
   const popularProviders = streamingProviders.filter(p => POPULAR_IDS.includes(p.provider_id))
     .sort((a, b) => POPULAR_IDS.indexOf(a.provider_id) - POPULAR_IDS.indexOf(b.provider_id));
@@ -119,7 +128,14 @@ export function ResultadosFilterBar({
 
   const currentYear = { start: yearStart, end: yearEnd };
 
-  function navigate(year: { start: number; end: number }, dur: string | null, providers: number[], emo: Emotions = emotions, countries: string[] = selectedCountries) {
+  function navigate(
+    year: { start: number; end: number },
+    dur: string | null,
+    providers: number[],
+    emo: Emotions = emotions,
+    countries: string[] = selectedCountries,
+    actors: Actor[] = resolvedActors()
+  ) {
     const p = new URLSearchParams({
       laugh:         String(emo.laugh),
       cry:           String(emo.cry),
@@ -140,6 +156,7 @@ export function ResultadosFilterBar({
     if (dur) p.set("duration", dur);
     if (providers.length) p.set("providers", providers.join(","));
     if (countries.length) p.set("countries", countries.join(","));
+    if (actors.length) p.set("cast", actors.map(a => a.id).join(","));
     setOpen(null);
     router.push(`/resultados?${p.toString()}`);
   }
@@ -148,13 +165,17 @@ export function ResultadosFilterBar({
   function resolvedDuration()  { return pendingDuration !== undefined ? pendingDuration : duration; }
   function resolvedProviders() { return pendingProviders ?? selectedProviders; }
   function resolvedEmotions()  { return pendingEmotions ?? emotions; }
+  function resolvedCountries() { return pendingCountries ?? isosToCountries(selectedCountries); }
+  function resolvedActors()    { return pendingActors ?? selectedActors; }
 
   function commitAndClose() {
-    navigate(resolvedYear(), resolvedDuration(), resolvedProviders(), resolvedEmotions());
+    navigate(resolvedYear(), resolvedDuration(), resolvedProviders(), resolvedEmotions(), resolvedCountries().map(c => c.iso), resolvedActors());
     setPendingYear(null);
     setPendingDuration(undefined);
     setPendingProviders(null);
     setPendingEmotions(null);
+    setPendingCountries(null);
+    setPendingActors(null);
     setOpen(null);
   }
 
@@ -163,7 +184,21 @@ export function ResultadosFilterBar({
     setPendingDuration(undefined);
     setPendingProviders(null);
     setPendingEmotions(null);
+    setPendingCountries(null);
+    setPendingActors(null);
     setOpen(null);
+  }
+
+  function openCountriesPopup() {
+    if (open === "countries") return;
+    if (!pendingCountries) setPendingCountries(isosToCountries(selectedCountries));
+    setOpen("countries");
+  }
+
+  function openCastPopup() {
+    if (open === "cast") return;
+    if (!pendingActors) setPendingActors([...selectedActors]);
+    setOpen("cast");
   }
 
   function openYearPopup() {
@@ -268,6 +303,40 @@ export function ResultadosFilterBar({
                 </div>
               )}
             </FilterCard>
+
+            <FilterCard label="PESSOAS" className="rfb__card--cast" active={open === "cast"} onClick={openCastPopup}>
+              {selectedActors.length === 0 ? (
+                <span className="rfb__card-value">Todos</span>
+              ) : (
+                <div className="rfb__cast-icons">
+                  {selectedActors.slice(0, 3).map(a => (
+                    a.profile_path ? (
+                      <img key={a.id} src={`https://image.tmdb.org/t/p/w45${a.profile_path}`} alt={a.name} className="rfb__cast-icon" />
+                    ) : (
+                      <div key={a.id} className="rfb__cast-icon rfb__cast-icon--placeholder">{a.name[0]}</div>
+                    )
+                  ))}
+                  {selectedActors.length > 3 && (
+                    <span className="rfb__mood-extra">+{selectedActors.length - 3}</span>
+                  )}
+                </div>
+              )}
+            </FilterCard>
+
+            <FilterCard label="PAÍS" className="rfb__card--countries" active={open === "countries"} onClick={openCountriesPopup}>
+              {selectedCountries.length === 0 ? (
+                <span className="rfb__card-value">Todos</span>
+              ) : (
+                <div className="rfb__country-flags">
+                  {selectedCountries.slice(0, 3).map(iso => (
+                    <span key={iso} className="rfb__country-flag">{isoToFlag(iso)}</span>
+                  ))}
+                  {selectedCountries.length > 3 && (
+                    <span className="rfb__mood-extra">+{selectedCountries.length - 3}</span>
+                  )}
+                </div>
+              )}
+            </FilterCard>
           </div>
         </div>
       </div>
@@ -358,6 +427,44 @@ export function ResultadosFilterBar({
               );
             })}
           </div>
+        </FilterPopup>
+      )}
+
+      {open === "cast" && pendingActors !== null && (
+        <FilterPopup
+          onCancel={cancelAndClose}
+          onConfirm={commitAndClose}
+          searchSlot={
+            <ActorSearchInput
+              selected={pendingActors}
+              onAdd={(actor: Actor) => setPendingActors(prev => [...(prev ?? []), actor])}
+            />
+          }
+        >
+          <span className="rfb__moods-title">FILTRAR POR PESSOAS</span>
+          <ActorSearchList
+            selected={pendingActors}
+            onRemove={(id: number) => setPendingActors(prev => (prev ?? []).filter(a => a.id !== id))}
+          />
+        </FilterPopup>
+      )}
+
+      {open === "countries" && pendingCountries !== null && (
+        <FilterPopup
+          onCancel={cancelAndClose}
+          onConfirm={commitAndClose}
+          searchSlot={
+            <CountrySearchInput
+              selected={pendingCountries}
+              onAdd={(country: Country) => setPendingCountries(prev => [...(prev ?? []), country])}
+            />
+          }
+        >
+          <span className="rfb__moods-title">FILTRAR POR PAÍS</span>
+          <CountrySearchList
+            selected={pendingCountries}
+            onRemove={(iso: string) => setPendingCountries(prev => (prev ?? []).filter(c => c.iso !== iso))}
+          />
         </FilterPopup>
       )}
     </>

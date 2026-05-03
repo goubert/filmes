@@ -69,10 +69,12 @@
 }
 
 /* FilterCard size modifiers */
-.rfb__card--moods     { width: 110px; }
-.rfb__card--period    { width: 116px; }
-.rfb__card--duration  { width: 110px; }
-.rfb__card--services  { width: 110px; }
+.rfb__card--moods      { width: 110px; }
+.rfb__card--period     { width: 116px; }
+.rfb__card--duration   { width: 110px; }
+.rfb__card--services   { width: 110px; }
+.rfb__card--cast       { width: 110px; }
+.rfb__card--countries  { width: 96px; }
 
 /* Card value text */
 .rfb__card-value {
@@ -139,6 +141,52 @@
   object-fit: cover;
   flex-shrink: 0;
   border-radius: 6px;
+}
+
+/* Cast icons in card */
+.rfb__cast-icons {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  width: 100%;
+  height: 21px;
+}
+
+.rfb__cast-icon {
+  width: 21px;
+  height: 21px;
+  object-fit: cover;
+  flex-shrink: 0;
+  border-radius: 50%;
+}
+
+.rfb__cast-icon--placeholder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #515050;
+  font-size: 9px;
+  font-weight: 600;
+  color: #bcbcbc;
+}
+
+/* Country flags in card */
+.rfb__country-flags {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  width: 100%;
+  height: 21px;
+}
+
+.rfb__country-flag {
+  font-size: 16px;
+  line-height: 1;
+  flex-shrink: 0;
 }
 
 /* ─── Popup content: Serviços ────────────────────────── */
@@ -272,10 +320,10 @@
 /* ─── Popup content: Moods ───────────────────────────── */
 
 .rfb__moods-title {
-  font-size: 11px;
-  font-weight: 500;
-  letter-spacing: 0.08em;
-  color: #686868;
+  font-size: 10px;
+  font-weight: 400;
+  letter-spacing: 0.02em;
+  color: #959595;
   text-transform: uppercase;
 }
 
