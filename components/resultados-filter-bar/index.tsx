@@ -158,6 +158,14 @@ export function ResultadosFilterBar({
     setOpen(null);
   }
 
+  function cancelAndClose() {
+    setPendingYear(null);
+    setPendingDuration(undefined);
+    setPendingProviders(null);
+    setPendingEmotions(null);
+    setOpen(null);
+  }
+
   function openYearPopup() {
     if (open === "year") return;
     if (!pendingYear) setPendingYear({ ...currentYear });
@@ -265,7 +273,7 @@ export function ResultadosFilterBar({
       </div>
 
       {open === "year" && pendingYear && (
-        <FilterPopup onClose={commitAndClose}>
+        <FilterPopup onCancel={cancelAndClose} onConfirm={commitAndClose}>
           <span className="rfb__period-title">FILTRAR FILMES NO PERÍODO:</span>
           <div className="rfb__period-list">
             {YEAR_PRESETS.map(p => (
@@ -285,7 +293,7 @@ export function ResultadosFilterBar({
       )}
 
       {open === "duration" && pendingDuration !== undefined && (
-        <FilterPopup onClose={commitAndClose}>
+        <FilterPopup onCancel={cancelAndClose} onConfirm={commitAndClose}>
           <span className="rfb__period-title">FILTRAR FILMES DURAÇÃO</span>
           <div className="rfb__period-list">
             {DURATION_OPTIONS.map(opt => (
@@ -305,7 +313,7 @@ export function ResultadosFilterBar({
       )}
 
       {open === "services" && pendingProviders !== null && (
-        <FilterPopup onClose={commitAndClose}>
+        <FilterPopup onCancel={cancelAndClose} onConfirm={commitAndClose}>
           <span className="rfb__moods-title">STREAMINGS SELECIONADOS</span>
           <div className="rfb__services-grid">
             {popularProviders.map(p => {
@@ -330,7 +338,7 @@ export function ResultadosFilterBar({
       )}
 
       {open === "moods" && pendingEmotions && (
-        <FilterPopup onClose={commitAndClose}>
+        <FilterPopup onCancel={cancelAndClose} onConfirm={commitAndClose}>
           {MOOD_KEYS.some(k => pendingEmotions[k as keyof Emotions] > 0) && (
             <span className="rfb__moods-title">MOODS SELECIONADOS</span>
           )}

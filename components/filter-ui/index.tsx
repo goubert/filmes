@@ -32,15 +32,26 @@ export const FilterCard = forwardRef<HTMLButtonElement, FilterCardProps>(
 // ─── FilterPopup ──────────────────────────────────────
 
 type FilterPopupProps = {
-  onClose: () => void;
+  onCancel: () => void;
+  onConfirm: () => void;
   children: React.ReactNode;
 };
 
-export function FilterPopup({ onClose, children }: FilterPopupProps) {
+export function FilterPopup({ onCancel, onConfirm, children }: FilterPopupProps) {
   return (
     <>
-      <div className="filter-overlay" onClick={onClose} />
-      <div className="filter-popup">{children}</div>
+      <div className="filter-overlay" onClick={onCancel} />
+      <div className="filter-popup">
+        <div className="filter-popup__content">{children}</div>
+        <div className="filter-popup__actions">
+          <button className="filter-popup__btn filter-popup__btn--cancel" onClick={onCancel}>
+            Cancelar
+          </button>
+          <button className="filter-popup__btn filter-popup__btn--confirm" onClick={onConfirm}>
+            Atualizar busca
+          </button>
+        </div>
+      </div>
     </>
   );
 }
