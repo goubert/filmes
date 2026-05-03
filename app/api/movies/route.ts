@@ -34,7 +34,10 @@ export async function GET(req: NextRequest) {
     : []
   const page = Number(s.get("page") ?? 1)
 
-  const movies = await discoverMoviesByEmotions(emotions, yearRange, [], duration, providerIds, page)
+  const countries = s.get("countries")?.split(",").filter(Boolean) ?? []
+  const actorIds = s.get("cast")?.split(",").map(Number).filter(Boolean) ?? []
+
+  const movies = await discoverMoviesByEmotions(emotions, yearRange, countries, duration, providerIds, page, actorIds)
 
   return NextResponse.json(movies)
 }
