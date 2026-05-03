@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect, useLayoutEffect, useRef } from "react";
 import "./actor-search.css";
 
 const TMDB_IMG = "https://image.tmdb.org/t/p/w45";
@@ -51,13 +51,45 @@ type InputProps = {
 export function ActorSearchInput({ selected, onAdd }: InputProps) {
   const [query, setQuery] = useState("");
   const [suggestions, setSuggestions] = useState<Actor[]>([]);
+  const wrapperRef = useRef<HTMLDivElement>(null);
+  const [dropdownStyle, setDropdownStyle] = useState<React.CSSProperties | null>(null);
 
-  // TODO: conectar ao TMDB /search/person com debounce
+  useLayoutEffect(() => {
+    if (!suggestions.length || !wrapperRef.current) { setDropdownStyle(null); return; }
+    const rect = wrapperRef.current.getBoundingClientRect();
+    setDropdownStyle({
+      position: "fixed",
+      left: rect.left,
+      width: rect.width,
+      bottom: window.innerHeight - rect.top + 6,
+      zIndex: 200,
+    });
+  }, [suggestions]);
+
+  useEffect(() => {
+    if (query.length < 2) { setSuggestions([]); return; }
+    const timer = setTimeout(async () => {
+      try {
+        const res = await fetch(
+          `/api/tmdb/search-person?query=${encodeURIComponent(query)}`
+        );
+        const data = await res.json();
+        const results: Actor[] = (data.results ?? [])
+          .filter((p: any) => p.known_for_department === "Acting")
+          .slice(0, 6)
+          .map((p: any) => ({ id: p.id as number, name: p.name as string, profile_path: (p.profile_path ?? null) as string | null }));
+        setSuggestions(results.filter(a => !selected.some(s => s.id === a.id)));
+      } catch {
+        setSuggestions([]);
+      }
+    }, 300);
+    return () => clearTimeout(timer);
+  }, [query, selected]);
 
   return (
-    <div className="as__search">
-      {suggestions.length > 0 && (
-        <div className="as__dropdown">
+    <div className="as__search" ref={wrapperRef}>
+      {suggestions.length > 0 && dropdownStyle && (
+        <div className="as__dropdown" style={dropdownStyle}>
           {suggestions.map(a => (
             <button
               key={a.id}
