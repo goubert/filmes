@@ -8,6 +8,48 @@ const EMOTION_LEVELS = {
 
 import { EMOTIONS } from "./emotions";
 
+export async function getCountriesBR() {
+  const res = await fetch(
+    `${API_URL}/configuration/countries?api_key=${process.env.NEXT_PUBLIC_TMDB_KEY}&language=pt-BR`,
+    { next: { revalidate: 86400 } }
+  )
+  const data = await res.json()
+  return (data as any[]).map(c => ({
+    iso: c.iso_3166_1 as string,
+    name: (c.native_name || c.english_name) as string,
+  }))
+}
+
+export async function searchActors(query: string) {
+  if (!query) return []
+  const res = await fetch(
+    `${API_URL}/search/person?api_key=${process.env.NEXT_PUBLIC_TMDB_KEY}&language=pt-BR&query=${encodeURIComponent(query)}`,
+    { cache: "no-store" }
+  )
+  const data = await res.json()
+  return ((data.results ?? []) as any[])
+    .filter((p: any) => p.known_for_department === "Acting")
+    .map((p: any) => ({
+      id: p.id as number,
+      name: p.name as string,
+      profile_path: (p.profile_path ?? null) as string | null,
+    }))
+}
+
+export async function getPersonsByIds(ids: number[]) {
+  if (!ids.length) return []
+  return Promise.all(
+    ids.map(id =>
+      fetch(
+        `${API_URL}/person/${id}?api_key=${process.env.NEXT_PUBLIC_TMDB_KEY}&language=pt-BR`,
+        { next: { revalidate: 86400 } }
+      )
+        .then(r => r.json())
+        .then(d => ({ id: d.id as number, name: d.name as string, profile_path: (d.profile_path ?? null) as string | null }))
+    )
+  )
+}
+
 export async function getStreamingProvidersBR() {
   const res = await fetch(
     `${API_URL}/watch/providers/movie?api_key=${process.env.NEXT_PUBLIC_TMDB_KEY}&language=pt-BR&watch_region=BR`,
@@ -19,32 +61,22 @@ export async function getStreamingProvidersBR() {
     .sort((a, b) => a.display_priority - b.display_priority)
 }
 
-export async function discoverMoviesByEmotions(
-  emotions: Record<string, number>,
-  yearRange: { start: number; end: number },
-  countries: string[],
-  duration: string | null = null,
-  providerIds: number[] = [],
-  page: number = 1
-) {
+// ── Shared emotion → genre/keyword resolver ─────────────
+
+function resolveEmotionParams(emotions: Record<string, number>) {
   const sorted = Object.entries(emotions).sort((a, b) => b[1] - a[1])
   const [mainEmotion, mainLevel] = sorted[0]
 
-  // ── Separa moods com keyword dos que só têm género ──────
   const hasKeywords = (key: string) =>
     (EMOTIONS[key as keyof typeof EMOTIONS].keywords?.length ?? 0) > 0
 
   const atMax = sorted.filter(([, level]) => level === 3)
-
-  // Moods de género puros em nível 3 (sem keywords) → AND entre géneros
   const genreModsAtMax = atMax.filter(([key]) => !hasKeywords(key))
 
   const withGenres: number[] = (() => {
     if (genreModsAtMax.length >= 2) {
-      // Vários géneros em nível 3 → AND
       return [...new Set(genreModsAtMax.flatMap(([key]) => EMOTIONS[key as keyof typeof EMOTIONS].genres))]
     }
-    // Só o principal + secundária se ≥ 2 (ignorando keyword-moods nessa contagem)
     const primary = EMOTIONS[mainEmotion as keyof typeof EMOTIONS].genres
     const secondary = sorted.find(([key, level]) => key !== mainEmotion && level >= 2 && !hasKeywords(key))
     if (secondary) {
@@ -53,23 +85,121 @@ export async function discoverMoviesByEmotions(
     return primary
   })()
 
-  // ── Keywords: moods avançados activos (nível ≥ 2) ───────
   const activeKeywordMoods = sorted.filter(([key, level]) => level >= 2 && hasKeywords(key))
-
-  // Géneros extras que vêm de keyword-moods (ex: psychological → 53)
-  const keywordExtraGenres = activeKeywordMoods.flatMap(
-    ([key]) => EMOTIONS[key as keyof typeof EMOTIONS].genres
-  )
-
-  // with_genres final = géneros base AND géneros de keyword-moods
+  const keywordExtraGenres = activeKeywordMoods.flatMap(([key]) => EMOTIONS[key as keyof typeof EMOTIONS].genres)
   const finalGenres = [...new Set([...withGenres, ...keywordExtraGenres])]
-
-  // with_keywords: dentro de cada mood as keywords são OR (pipe), entre moods são AND (vírgula)
   const withKeywords = activeKeywordMoods
     .map(([key]) => EMOTIONS[key as keyof typeof EMOTIONS].keywords!.join("|"))
     .join(",")
-
   const levelConfig = EMOTION_LEVELS[mainLevel as 1 | 2 | 3] ?? EMOTION_LEVELS[1]
+
+  return { finalGenres, withKeywords, levelConfig }
+}
+
+// ── Actor path: filmography intersection + client-side filters ─
+
+async function discoverByActors(
+  actorIds: number[],
+  emotions: Record<string, number>,
+  yearRange: { start: number; end: number },
+  countries: string[],
+  duration: string | null,
+  providerIds: number[],
+  page: number
+) {
+  const { finalGenres, withKeywords, levelConfig } = resolveEmotionParams(emotions)
+
+  // 1. Busca filmografias em paralelo
+  const filmographies = await Promise.all(
+    actorIds.map(id =>
+      fetch(
+        `${API_URL}/person/${id}/movie_credits?api_key=${process.env.NEXT_PUBLIC_TMDB_KEY}&language=pt-BR`,
+        { cache: "no-store" }
+      ).then(r => r.json())
+    )
+  )
+
+  // 2. Interseção de IDs (filmes em comum entre todos os atores)
+  const idSets = filmographies.map(f => new Set<number>((f.cast ?? []).map((m: any) => m.id as number)))
+  const intersectionIds = [...idSets[0]].filter(id => idSets.every(s => s.has(id)))
+
+  // 3. Mapa de dados base (genre_ids, release_date, vote_average, vote_count já vêm no credits)
+  const movieMap = new Map<number, any>()
+  filmographies.forEach(f => (f.cast ?? []).forEach((m: any) => movieMap.set(m.id, m)))
+  const candidates = intersectionIds.map(id => movieMap.get(id)).filter(Boolean)
+
+  // 4. Filtros baratos (sem chamada extra à API)
+  const preFiltered = candidates.filter(m => {
+    const year = m.release_date ? new Date(m.release_date).getFullYear() : 0
+    if (year < yearRange.start || year > yearRange.end) return false
+    if ((m.vote_count ?? 0) < levelConfig.voteCount) return false
+    if ((m.vote_average ?? 0) < levelConfig.voteAverage) return false
+    if (finalGenres.length > 0 && !finalGenres.every(g => (m.genre_ids ?? []).includes(g))) return false
+    return true
+  })
+
+  // 5. Busca detalhes completos (runtime, providers, keywords) só dos pré-filtrados
+  const detailed = await Promise.all(
+    preFiltered.map(m =>
+      fetch(
+        `${API_URL}/movie/${m.id}?api_key=${process.env.NEXT_PUBLIC_TMDB_KEY}&language=pt-BR&append_to_response=watch/providers,keywords`,
+        { cache: "no-store" }
+      ).then(r => r.json())
+    )
+  )
+
+  // 6. Filtros completos
+  const fullyFiltered = detailed.filter(m => {
+    if (duration === "short"  && (m.runtime ?? 0) > 90) return false
+    if (duration === "medium" && ((m.runtime ?? 0) < 91 || (m.runtime ?? 0) > 120)) return false
+    if (duration === "long"   && (m.runtime ?? 0) < 121) return false
+
+    if (countries.length > 0) {
+      const mc = (m.production_countries ?? []).map((c: any) => c.iso_3166_1)
+      if (!countries.some(c => mc.includes(c))) return false
+    }
+
+    if (providerIds.length > 0) {
+      const flat = (m["watch/providers"]?.results?.BR?.flatrate ?? []).map((p: any) => p.provider_id)
+      if (!providerIds.some(pid => flat.includes(pid))) return false
+    }
+
+    if (withKeywords) {
+      const movieKwIds = (m.keywords?.keywords ?? []).map((k: any) => k.id)
+      const andGroups = withKeywords.split(",")
+      if (!andGroups.every(group => group.split("|").map(Number).some(id => movieKwIds.includes(id)))) return false
+    }
+
+    return true
+  })
+
+  // 7. Ordena, pagina e formata igual ao path normal
+  const PAGE_SIZE = 20
+  const sorted_result = fullyFiltered.sort((a, b) => (b.vote_average ?? 0) - (a.vote_average ?? 0))
+  const pageData = sorted_result.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE)
+
+  return pageData.map(m => ({
+    ...m,
+    streaming: m["watch/providers"]?.results?.BR?.flatrate ?? [],
+  }))
+}
+
+// ── Main discover function ───────────────────────────────
+
+export async function discoverMoviesByEmotions(
+  emotions: Record<string, number>,
+  yearRange: { start: number; end: number },
+  countries: string[],
+  duration: string | null = null,
+  providerIds: number[] = [],
+  page: number = 1,
+  actorIds: number[] = []
+) {
+  if (actorIds.length > 0) {
+    return discoverByActors(actorIds, emotions, yearRange, countries, duration, providerIds, page)
+  }
+
+  const { finalGenres, withKeywords, levelConfig } = resolveEmotionParams(emotions)
 
   const params = new URLSearchParams({
     api_key: process.env.NEXT_PUBLIC_TMDB_KEY!,

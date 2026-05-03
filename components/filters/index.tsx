@@ -2,6 +2,8 @@
 
 import { useEffect, useState } from "react"
 import "./filters.css"
+import { CountrySearch, Country } from "../country-search"
+import { ActorSearch, Actor } from "../actor-search"
 
 const MIN_YEAR = 1900
 const MAX_YEAR = 2026
@@ -15,6 +17,8 @@ const POPULAR_IDS = [8, 119, 337, 1899, 307, 531, 350, 283, 11, 227, 188, 167, 2
 
 type Provider = { provider_id: number; provider_name: string; logo_path: string }
 
+export type { Country, Actor }
+
 type FiltersProps = {
   yearStart: number
   yearEnd: number
@@ -23,12 +27,18 @@ type FiltersProps = {
   onDurationChange: (value: string | null) => void
   selectedProviders: number[]
   onProvidersChange: (ids: number[]) => void
+  selectedCountries: Country[]
+  onCountriesChange: (countries: Country[]) => void
+  selectedActors: Actor[]
+  onActorsChange: (actors: Actor[]) => void
 }
 
 export function FiltersSection({
   yearStart, yearEnd, onYearChange,
   duration, onDurationChange,
   selectedProviders, onProvidersChange,
+  selectedCountries, onCountriesChange,
+  selectedActors, onActorsChange,
 }: FiltersProps) {
   const [providers, setProviders] = useState<Provider[]>([])
 
@@ -98,7 +108,7 @@ export function FiltersSection({
       </div>
 
       {/* Ano */}
-      <div className="filter-block filter-block--bottom">
+      <div className="filter-block filter-block--middle">
         <span className="filter-label">Ano</span>
         <div className="year-slider-wrapper">
           <div className="year-slider-track-container">
@@ -130,6 +140,26 @@ export function FiltersSection({
             ))}
           </div>
         </div>
+      </div>
+
+      {/* País */}
+      <div className="filter-block filter-block--middle">
+        <span className="filter-label">País</span>
+        <CountrySearch
+          selected={selectedCountries}
+          onAdd={c => onCountriesChange([...selectedCountries, c])}
+          onRemove={iso => onCountriesChange(selectedCountries.filter(c => c.iso !== iso))}
+        />
+      </div>
+
+      {/* Pessoas */}
+      <div className="filter-block filter-block--bottom">
+        <span className="filter-label">Pessoas</span>
+        <ActorSearch
+          selected={selectedActors}
+          onAdd={a => onActorsChange([...selectedActors, a])}
+          onRemove={id => onActorsChange(selectedActors.filter(a => a.id !== id))}
+        />
       </div>
 
     </div>
