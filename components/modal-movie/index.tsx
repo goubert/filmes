@@ -148,11 +148,7 @@ export function MovieModal({ movieId, onClose }: Props) {
         
 
             <div className="header-movie">
-                <button className="btn-fechar"onClick={onClose}>
-                    <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M5 15L15 5M5 5L15 15" stroke="#FAF0EC" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-                    </svg>
-                </button>
+                
                 <img
                 className="backdrop-poster"
                 src={`https://image.tmdb.org/t/p/w500${movie.backdrop_path}`}
@@ -266,6 +262,11 @@ export function MovieModal({ movieId, onClose }: Props) {
                     
                    
             </div>
+            <button className="btn-fechar" onClick={onClose}>
+                <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M5 15L15 5M5 5L15 15" stroke="#FAF0EC" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </button>
         </div>
         
     </div>
