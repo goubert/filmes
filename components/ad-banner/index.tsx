@@ -24,18 +24,28 @@ export default function AdBanner({
 
     if (!ad) return;
 
-    // evita reinicializar anúncio já carregado
-    if (
-      ad.getAttribute('data-adsbygoogle-status') === 'done'
-    ) {
-      return;
-    }
+    const interval = setInterval(() => {
+      const width = ad.offsetWidth;
 
-    try {
-      (window.adsbygoogle = window.adsbygoogle || []).push({});
-    } catch (err) {
-      console.error('AdSense error:', err);
-    }
+      // espera o elemento ter tamanho real
+      if (width > 0) {
+        // evita push duplicado
+        if (
+          ad.getAttribute('data-adsbygoogle-status') !== 'done'
+        ) {
+          try {
+            (window.adsbygoogle =
+              window.adsbygoogle || []).push({});
+          } catch (err) {
+            console.error('AdSense error:', err);
+          }
+        }
+
+        clearInterval(interval);
+      }
+    }, 300);
+
+    return () => clearInterval(interval);
   }, []);
 
   return (
