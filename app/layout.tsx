@@ -46,6 +46,12 @@ export default function RootLayout({
           })(window, document, "clarity", "script", "wb2w48973f");
           `}
         </Script>
+
+        <Script
+          src="hhttps://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2529666899037234"
+          strategy="beforeInteractive"
+          crossOrigin="anonymous"
+        />
       </head>
       <body className={`antialiased`}>
         {children}

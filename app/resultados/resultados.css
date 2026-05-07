@@ -6,6 +6,11 @@
   flex-direction: column;
   gap: var(--space-lg);
   overflow-x: hidden;
+  max-width: 960px;
+  margin: 0 auto;
+  @media (min-width: 1800px) {
+    max-width: 1280px;
+  }
 }
 
 /* Back button */
@@ -40,7 +45,37 @@
   padding: 0 var(--space-md);
 
   @media (min-width: 1024px) {
+    grid-template-columns: repeat(5, 1fr);
+    gap: var(--space-md);
+  }
+  @media (min-width: 1800px) {
     grid-template-columns: repeat(6, 1fr);
     gap: var(--space-md);
   }
+}
+
+.main-container{
+  display: flex;
+  flex-direction: row;
+  gap: var(--space-md);
+}
+
+.ads-wrap{
+  
+  width: auto;
+  flex-grow: 1;
+  position: sticky;
+  top: 60px;
+  margin: var(--space-lg);
+  height: 500px;
+  @media (max-width: 860px) {
+    display: none;
+  }
+}
+
+.ads-wrap.left{
+  left: 12px;
+}
+.ads-wrap.right{
+  right: 12px;
 }

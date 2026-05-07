@@ -3,6 +3,8 @@ import "./resultados-layout.css";
 import { discoverMoviesByEmotions, getStreamingProvidersBR, getPersonsByIds } from "@/lib/tmdb";
 import { ResultadosFilterBar } from "@/components/resultados-filter-bar";
 import { MovieList } from "./MovieList";
+import AdBanner from '@/components/ad-banner';
+
 
 
 type SearchParams = {
@@ -86,13 +88,22 @@ export default async function ResultadosPage({
       <p className="resultados-found-label">Filmes encontrados:</p>
     </div>
     <div className="resultados-separator" />
-    <main className="resultados">
-      <MovieList
-        key={JSON.stringify(searchParams)}
-        initialMovies={movies}
-        searchParams={searchParams as Record<string, string>}
-      />
-    </main>
+    <div className="main-container">
+      <div className="ads-wrap left">
+        <AdBanner slot="7472161487" />
+      </div>
+      <main className="resultados">
+        <MovieList
+          key={JSON.stringify(searchParams)}
+          initialMovies={movies}
+          searchParams={searchParams as Record<string, string>}
+        />
+      </main>
+      <div className="ads-wrap right">
+        <AdBanner slot="4563844384" />
+      </div>
+    </div>
+    
     <ResultadosFilterBar
       emotions={emotions}
       yearStart={yearRange.start}
