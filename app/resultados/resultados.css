@@ -61,13 +61,12 @@
 }
 
 .ads-wrap{
-  
-  width: auto;
+  width: 300px;
   flex-grow: 1;
   position: sticky;
   top: 60px;
-  margin: var(--space-lg);
-  height: 500px;
+  margin-top: var(--space-lg);
+  height: fit-content;
   @media (max-width: 860px) {
     display: none;
   }
